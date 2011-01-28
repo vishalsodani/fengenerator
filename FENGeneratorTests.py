@@ -145,6 +145,103 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.FENAfterMove('dxe5')
   
         self.assertEqual('rnbqkbnr/ppp2ppp/3p4/4P3/4P3/8/PPP2PPP/RNBQKBNR',FENGen.FEN)
+    def test_ForRookMoveHorizontally(self):
+        FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
+        FENGen.FENAfterMove('e4')
+        FENGen.FENAfterMove('c5')
+        FENGen.FENAfterMove('Nf3')
+        FENGen.FENAfterMove('d6')
+        FENGen.FENAfterMove('Bc4')
+        FENGen.FENAfterMove('e6')
+        FENGen.FENAfterMove('0-0')
+        FENGen.FENAfterMove('Be7')
+
+        FENGen.FENAfterMove('Re1')
+
+        
+        self.assertEqual('rnbqk1nr/pp2bppp/3pp3/2p5/2B1P3/5N2/PPPP1PPP/RNBQR1K1',FENGen.FEN)
+    def test_ForRookMoveVertically(self):
+        FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
+        FENGen.FENAfterMove('e4')
+        FENGen.FENAfterMove('c5')
+        FENGen.FENAfterMove('Nf3')
+        FENGen.FENAfterMove('d6')
+        FENGen.FENAfterMove('Bc4')
+        FENGen.FENAfterMove('e6')
+        FENGen.FENAfterMove('0-0')
+        FENGen.FENAfterMove('Be7')
+
+        FENGen.FENAfterMove('Re1')
+        FENGen.FENAfterMove('Nf6')
+        FENGen.FENAfterMove('Re3')
+
+        
+        self.assertEqual('rnbqk2r/pp2bppp/3ppn2/2p5/2B1P3/4RN2/PPPP1PPP/RNBQ2K1',FENGen.FEN)
+    def test_ForRookMoveHorizontally_When2RooksCanmove(self):
+        FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
+        FENGen.FENAfterMove('e4')
+        FENGen.FENAfterMove('c5')
+        FENGen.FENAfterMove('Nf3')
+        FENGen.FENAfterMove('d6')
+        FENGen.FENAfterMove('d4')
+        #self.assertEqual('rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R',FENGen.FEN)
+        FENGen.FENAfterMove('cxd4')
+        #self.assertEqual('rnbqkbnr/pp2pppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R',FENGen.FEN)
+        FENGen.FENAfterMove('Nxd4')
+        #self.assertEqual('rnbqkbnr/pp2pppp/3p4/8/3NP3/8/PPP2PPP/RNBQKB1R',FENGen.FEN)
+        #print FENGen.FEN
+        FENGen.FENAfterMove('Nf6')
+        #self.assertEqual('rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R',FENGen.FEN)
+        FENGen.FENAfterMove('Nc3')
+        self.assertEqual('rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R',FENGen.FEN)
+        FENGen.FENAfterMove('a6')
+        FENGen.FENAfterMove('Be2')
+        FENGen.FENAfterMove('e6')
+        FENGen.FENAfterMove('0-0')
+        FENGen.FENAfterMove('Be7')
+        FENGen.FENAfterMove('a4')
+        FENGen.FENAfterMove('Nc6')
+        FENGen.FENAfterMove('Be3')
+        FENGen.FENAfterMove('0-0')
+        FENGen.FENAfterMove('f4')
+        FENGen.FENAfterMove('Qc7')
+        FENGen.FENAfterMove('Kh1')
+        FENGen.FENAfterMove('Re8')
+        FENGen.FENAfterMove('Bf3')
+        FENGen.FENAfterMove('Nd7')
+        FENGen.FENAfterMove('Qe1')
+        FENGen.FENAfterMove('Bf8')
+        FENGen.FENAfterMove('Qf2')
+        FENGen.FENAfterMove('Rb8')
+        FENGen.FENAfterMove('Rad1')
+        FENGen.FENAfterMove('Nxd4')
+        FENGen.FENAfterMove('Rfe1')
+        print FENGen.FEN
+        self.assertEqual('1rb1rbk1/1pqn1ppp/p2pp3/8/P2nPP2/2N1BB2/1PP2QPP/3RR2K',FENGen.FEN)
+    def test_ForKnightMove_When2KnightsCanmove(self):
+        FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
+        FENGen.FENAfterMove('e4')
+        FENGen.FENAfterMove('c5')
+        FENGen.FENAfterMove('Nf3')
+        FENGen.FENAfterMove('d6')
+        FENGen.FENAfterMove('d4')
+
+        FENGen.FENAfterMove('cxd4')
+
+        FENGen.FENAfterMove('Nxd4')
+
+        FENGen.FENAfterMove('Nf6')
+
+        FENGen.FENAfterMove('Nc3')
+        FENGen.FENAfterMove('a6')
+        FENGen.FENAfterMove('Ncb5')
+        self.assertEqual('rnbqkb1r/1p2pppp/p2p1n2/1N6/3NP3/8/PPP2PPP/R1BQKB1R',FENGen.FEN)
+
+
+        
+        
+        
+        
 
         
 if __name__ == '__main__':

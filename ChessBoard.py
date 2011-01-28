@@ -60,6 +60,7 @@ class ChessBoard:
         self.MoveTurn = self.W
         self.PawnCaptureByPawn = False
         self.currentfen = ''
+        self.OriginalFile = []
 
     def genFEN(self):
         fen = ''
@@ -106,6 +107,8 @@ class ChessBoard:
                 movePiece = self.BlackKnight
         elif pieceToMove == 'B' and self.MoveTurn == self.W:
                 movePiece = self.WhiteBishop
+        elif pieceToMove == 'B' and self.MoveTurn == self.B:
+                movePiece = self.BlackBishop
         elif pieceToMove == 'Q' and self.MoveTurn == self.W:
                 movePiece = self.WhiteQueen
         elif pieceToMove == 'Q' and self.MoveTurn == self.B:
@@ -114,6 +117,10 @@ class ChessBoard:
                 movePiece = self.WhiteKing
         elif pieceToMove == 'K' and self.MoveTurn == self.B:
                 movePiece = self.BlackKing
+        elif pieceToMove == 'R' and self.MoveTurn == self.W:
+                movePiece = self.WhiteRook
+        elif pieceToMove == 'R' and self.MoveTurn == self.B:
+                movePiece = self.BlackRook
         return movePiece
     
     def MovePieceTo(self,move):
@@ -125,6 +132,11 @@ class ChessBoard:
             self.Board[0][7]=''
             self.Board[0][5]=self.WhiteRook
             self.Board[0][6]=self.WhiteKing
+        elif move == '0-0' and self.MoveTurn == self.B:
+            self.Board[7][4]=''
+            self.Board[7][7]=''
+            self.Board[7][5]=self.BlackRook
+            self.Board[7][6]=self.BlackKing
         else:    
             typeofpieceToMove = PieceParser().getPieceMoved(move)
             
@@ -133,7 +145,7 @@ class ChessBoard:
             destSquare = self.getDestinationSquare(move,typeofpieceToMove)
             
             if typeofpieceToMove == Pieces.Pawn:
-                orgSquare = self.getOriginalPosition(typeofpieceToMove,destSquare)
+                orgSquare = self.getOriginalPosition(typeofpieceToMove,destSquare,move)
             else:
                 orgSquare = self.getOriginalPositionForKnight(typeofpieceToMove,destSquare)
                 
@@ -141,9 +153,22 @@ class ChessBoard:
             if typeofpieceToMove == Pieces.Pawn:
                 self.Board[orgSquare[0]][orgSquare[1]] = ''
             elif typeofpieceToMove == Pieces.Knight:
-                for pp in orgSquare:
-                    if pp.filep - destSquare[1] == 1 or pp.filep - destSquare[1] == -1:
-                        self.Board[pp.rank][pp.filep]=''
+                print "for"
+                if len(self.OriginalFile) == 1:
+                    for pp in orgSquare:
+                        if pp.filep == self.OriginalFile[0]:
+                            self.Board[pp.rank][pp.filep]= ''
+                        
+                else:
+                    
+                    for pp in orgSquare:
+                    
+                        if (pp.filep - destSquare[1] == 1 or pp.filep - destSquare[1] == -1) and  abs(pp.rank - destSquare[0]) == 2:
+                            print "1"
+                            self.Board[pp.rank][pp.filep]=''
+                        if destSquare[0] - pp.rank == 1 and  pp.filep - destSquare[1] == 2:
+                            print "2"
+                            self.Board[pp.rank][pp.filep]=''
             elif typeofpieceToMove == Pieces.Bishop:
                 # find if original square n destdquare are even or odd
                 evensq = True
@@ -158,11 +183,38 @@ class ChessBoard:
                         self.Board[pp.rank][pp.filep] = ''
             elif typeofpieceToMove == Pieces.Queen or typeofpieceToMove == Pieces.King:
                 self.Board[orgSquare[0].rank][orgSquare[0].filep]= ''
+            elif typeofpieceToMove == Pieces.Rook:
+
+                if len(self.OriginalFile) == 1:
+                    for rook in orgSquare:
+                        if rook.filep == self.OriginalFile[0]:
+                            print "here:"
+                            whichrook = rook
+                
+                elif len(orgSquare) > 1:
+                    
+                    #is it horizontal movement, if both rooks are on same rank in original position
+                    for rook in orgSquare:
+                        whichrook = rook
+                        diffsqrank = abs(rook.rank - destSquare[0])
+                        diffsqfile = abs(rook.filep - destSquare[1])
+                        if diffsqrank == 0 and diffsqfile == 1:
+                            whichrook= rook
+                            break
+                        elif diffsqrank == 0:
+                            for ifile in range(1,diffsqfile):
+                                if self.Board[rook.rank][rook.filep + 1] != "":
+                                    break
+                                else:
+                                    whichrook = rook
+                self.Board[whichrook.rank][whichrook.filep]=""
+                            
+                    
         
             
         
 
-    def getOriginalPosition(self,piece,newsquare):
+    def getOriginalPosition(self,piece,newsquare,move):
         #if its pawn can move one or 2 squares #which file how many pawns on that file
         fenranks = self.currentfen.split('/')
         
@@ -186,12 +238,15 @@ class ChessBoard:
         if len(ranks) == 1 and self.PawnCaptureByPawn == False:
             originalpos.append(ranks[0])
             originalpos.append(fil)
-            print "x"                                   
-            print len(ranks)
-            print "y"
         elif len(ranks) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == self.B:
+            
             originalpos.append(newsquare[0] + 1)
-            originalpos.append(fil + 1)
+            if move[2] > move[0]:
+                originalpos.append(fil - 1)
+            else:
+                originalpos.append(fil + 1)
+                
+            
         elif len(ranks) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == self.W:
             originalpos.append(newsquare[0] - 1)
             originalpos.append(fil - 1)
@@ -227,10 +282,15 @@ class ChessBoard:
                 piecetolookfor = 'K'
             else:
                 piecetolookfor = 'k'
+        if piece == Pieces.Rook:
+            if self.MoveTurn == self.W:
+                piecetolookfor = 'R'
+            else:
+                piecetolookfor = 'r'
             
         
 
-        if piece == 'N' or piece == 'B' or piece == 'Q' or piece == 'K':
+        if piece == 'N' or piece == 'B' or piece == 'Q' or piece == 'K' or piece == 'R':
             
             for i in range(0,8):
                    filepos = 0 
@@ -251,6 +311,8 @@ class ChessBoard:
         
     def getDestinationSquare(self,move,pieceToMove):
         destList = []
+        self.PawnCaptureByPawn = False
+        self.OriginalFile=[]
         if pieceToMove == Pieces.Pawn:
             if 'x' in move:
                 destFile = self.Files.index(move[2])
@@ -267,8 +329,13 @@ class ChessBoard:
                 destRank = int(move[3])-1
         
             else:
-                destFile = self.Files.index(move[1])
-                destRank = int(move[2])-1
+                if len(move) == 4:
+                    self.OriginalFile.append(self.Files.index(move[1]))
+                    destFile = self.Files.index(move[2])
+                    destRank = int(move[3])-1
+                else:
+                    destFile = self.Files.index(move[1])
+                    destRank = int(move[2])-1
         destList.append(destRank)
         destList.append(destFile)
         return destList
