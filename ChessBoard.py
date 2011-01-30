@@ -1,3 +1,6 @@
+from Pieces import PieceParser
+from Pieces import Pieces
+from Pieces import PiecePosition
 class ChessBoard:
     W = 'White'
     B = 'Black'
@@ -127,12 +130,12 @@ class ChessBoard:
         #whats the piece, figure out original position n new position
         #parse first character of string to know the piece
         #whose move
-        if move == '0-0' and self.MoveTurn == self.W:
+        if move == 'O-O' and self.MoveTurn == self.W:
             self.Board[0][4]=''
             self.Board[0][7]=''
             self.Board[0][5]=self.WhiteRook
             self.Board[0][6]=self.WhiteKing
-        elif move == '0-0' and self.MoveTurn == self.B:
+        elif move == 'O-O' and self.MoveTurn == self.B:
             self.Board[7][4]=''
             self.Board[7][7]=''
             self.Board[7][5]=self.BlackRook
@@ -343,11 +346,8 @@ class ChessBoard:
         self.OriginalFile=[]
         if pieceToMove == Pieces.Pawn:
             if 'x' in move:
-                print move + "dest"
                 destFile = self.Files.index(move[2])
                 destRank = int(move[3])-1
-                print destFile
-                print destRank
                 self.PawnCaptureByPawn = True
             else:
                 destFile = self.Files.index(move[0])
@@ -366,32 +366,11 @@ class ChessBoard:
                     destFile = self.Files.index(move[2])
                     destRank = int(move[3])-1
                 else:
-                    print "ddd"
-                    print move
                     destFile = self.Files.index(move[1])
                     destRank = int(move[2])-1
         destList.append(destRank)
         destList.append(destFile)
         return destList
             
-class PiecePosition:
 
-    def __init__(self,rank,filep):
-        self.rank = rank
-        self.filep = filep
-class PieceParser:
-    chessPiecesRepresentation = ['N','K','R','Q','B']
-    def getPieceMoved(self,move):
-                
-        if move[0] in self.chessPiecesRepresentation:
-            return self.chessPiecesRepresentation[self.chessPiecesRepresentation.index(move[0])] 
-        else:
-            return 'P'
-class Pieces:
-    Queen = 'Q'
-    King = 'K'
-    Rook ='R'
-    Knight = 'N'
-    Pawn = 'P'
-    Bishop = 'B'
         
