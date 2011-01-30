@@ -1,0 +1,1 @@
+I am developing this utility for my personal project. I need to generate FEN after every black or white move from a game. The game moves are loaded from a pgn file, and then FENGenerator will be used to get FEN string. This FEN string is then used to generate a layout chessboard with pieces.
