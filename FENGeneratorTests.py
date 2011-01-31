@@ -216,7 +216,7 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('Rad1')
         FENGen.fen_after_move('Nxd4')
         FENGen.fen_after_move('Rfe1')
-        print FENGen.fen
+        
         self.assertEqual('1rb1rbk1/1pqn1ppp/p2pp3/8/P2nPP2/2N1BB2/1PP2QPP/3RR2K',FENGen.fen)
     def test_ForKnightMove_When2KnightsCanmove(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')

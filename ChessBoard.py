@@ -207,13 +207,14 @@ class ChessBoard:
                     
         
             
-        
+    def get_file_of_newsquare(self,newsquare):
+        return newsquare[1]
 
     def getOriginalPosition(self,piece,newsquare,move):
         #if its pawn can move one or 2 squares #which file how many pawns on that file
-        fenranks = self.currentfen.split('/')
+
         
-        fil = newsquare[1]
+        fil = self.get_file_of_newsquare(newsquare)
         ranks = []
         originalpos = []
         ##for pawn
