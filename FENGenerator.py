@@ -1,16 +1,16 @@
 import ChessBoard
 
 class FENGenerator:
-    def __init__(self,initialFEN):
-        self.FEN = initialFEN
-        self.Board = ChessBoard.ChessBoard()
-        self.MoveTurn = self.Board.MoveTurn
+    def __init__(self, initial_fen):
+        self.fen = initial_fen
+        self.board = ChessBoard.ChessBoard()
+        self.move_turn = self.board.MoveTurn
         
-    def FENAfterMove(self,move):
+    def fen_after_move(self, move):
         
-        self.Board.MovePieceTo(move)
-        self.FEN = self.Board.genFEN()
-        return self.FEN
+        self.board.MovePieceTo(move)
+        self.fen = self.board.genFEN()
+        return self.fen
         
 
 

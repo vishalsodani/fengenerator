@@ -1,6 +1,8 @@
 from Pieces import PieceParser
 from Pieces import Pieces
 from Pieces import PiecePosition
+
+
 class ChessBoard:
     W = 'White'
     B = 'Black'
@@ -91,11 +93,11 @@ class ChessBoard:
                 elif emptySquaresCount > 0 and afile == 7 and self.Board[rank][afile] == EMPTYSQUARE:
                     fen += str(emptySquaresCount)
                     emptySquaresCount = 0
-                   
-        if self.MoveTurn == self.W:
-            self.MoveTurn = self.B
-        else:
-            self.MoveTurn = self.W
+           
+
+
+        self.MoveTurn = self.B if self.MoveTurn == self.W else self.W
+
         self.currentfen = fen
         return fen
 
