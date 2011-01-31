@@ -101,32 +101,16 @@ class ChessBoard:
         self.currentfen = fen
         return fen
 
+    
     def evaluatePieceToMove(self,pieceToMove):
-        if pieceToMove == 'P' and self.MoveTurn == self.W:
-                movePiece = self.WhitePawn
-        elif pieceToMove == 'P' and self.MoveTurn == self.B:
-                movePiece = self.BlackPawn
-        elif pieceToMove == 'N' and self.MoveTurn == self.W:
-                movePiece = self.WhiteKnight
-        elif pieceToMove == 'N' and self.MoveTurn == self.B:
-                movePiece = self.BlackKnight
-        elif pieceToMove == 'B' and self.MoveTurn == self.W:
-                movePiece = self.WhiteBishop
-        elif pieceToMove == 'B' and self.MoveTurn == self.B:
-                movePiece = self.BlackBishop
-        elif pieceToMove == 'Q' and self.MoveTurn == self.W:
-                movePiece = self.WhiteQueen
-        elif pieceToMove == 'Q' and self.MoveTurn == self.B:
-                movePiece = self.BlackQueen
-        elif pieceToMove == 'K' and self.MoveTurn == self.W:
-                movePiece = self.WhiteKing
-        elif pieceToMove == 'K' and self.MoveTurn == self.B:
-                movePiece = self.BlackKing
-        elif pieceToMove == 'R' and self.MoveTurn == self.W:
-                movePiece = self.WhiteRook
-        elif pieceToMove == 'R' and self.MoveTurn == self.B:
-                movePiece = self.BlackRook
-        return movePiece
+        whitepieces = {Pieces.Pawn : self.WhitePawn , Pieces.Knight : self.WhiteKnight, Pieces.Bishop: self.WhiteBishop, Pieces.Queen : self.WhiteQueen,
+                       Pieces.King : self.WhiteKing, Pieces.Rook : self.WhiteRook}
+        blackpieces = {Pieces.Pawn : self.BlackPawn , Pieces.Knight : self.BlackKnight, Pieces.Bishop: self.BlackBishop, Pieces.Queen : self.BlackQueen,
+                       Pieces.King : self.BlackKing, Pieces.Rook : self.BlackRook}
+
+        
+        return whitepieces[pieceToMove] if self.MoveTurn == self.W else blackpieces[pieceToMove]
+       
     
     def MovePieceTo(self,move):
         #whats the piece, figure out original position n new position
@@ -148,12 +132,7 @@ class ChessBoard:
             movePiece = self.evaluatePieceToMove(typeofpieceToMove)
             
             destSquare = self.getDestinationSquare(move,typeofpieceToMove)
-            '''
-            if move == "bxc5":
-                print "here"
-                print destSquare[0]
-                print destSquare[1]
-            '''
+     
             
             if typeofpieceToMove == Pieces.Pawn:
                 orgSquare = self.getOriginalPosition(typeofpieceToMove,destSquare,move)
@@ -272,11 +251,7 @@ class ChessBoard:
         elif len(ranks) == 0 and self.PawnCaptureByPawn == True and self.MoveTurn == self.B:
             originalpos.append(newsquare[0] + 1)
             originalpos.append(fil - 1)
-            print move
-            print originalpos[0]
-            print originalpos[1]
-            print newsquare[0]
-            print fil
+            
  
  
         
