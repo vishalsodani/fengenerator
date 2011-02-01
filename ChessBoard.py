@@ -67,6 +67,7 @@ class ChessBoard:
         self.PawnCaptureByPawn = False
         self.currentfen = ''
         self.OriginalFile = []
+        self.piecetomove = ''
 
     def genFEN(self):
         
@@ -134,7 +135,7 @@ class ChessBoard:
         else:    
             typeofpieceToMove = PieceParser().getPieceMoved(move)
             
-            movePiece = self.evaluatePieceToMove(typeofpieceToMove)
+            self.piecetomove = self.evaluatePieceToMove(typeofpieceToMove)
             
             destSquare = self.getDestinationSquare(move,typeofpieceToMove)
      
@@ -144,7 +145,7 @@ class ChessBoard:
             else:
                 orgSquare = self.getOriginalPositionForKnight(typeofpieceToMove,destSquare)
                 
-            self.Board[destSquare[0]][destSquare[1]] = movePiece
+            self.Board[destSquare[0]][destSquare[1]] = self.piecetomove
             if typeofpieceToMove == Pieces.Pawn:
                 self.Board[orgSquare[0]][orgSquare[1]] = ''
             elif typeofpieceToMove == Pieces.Knight:
@@ -271,33 +272,8 @@ class ChessBoard:
         fil = newsquare[1]
         ranks = []
         originalpos = []
-        piecetolookfor = ''
-        if piece == Pieces.Knight:
-            if self.MoveTurn == self.W:
-                piecetolookfor = 'N'
-            else:
-                piecetolookfor = 'n'
-        if piece == Pieces.Bishop:
-            if self.MoveTurn == self.W:
-                piecetolookfor = 'B'
-            else:
-                piecetolookfor = 'b'
-                   
-        if piece == Pieces.Queen:
-            if self.MoveTurn == self.W:
-                piecetolookfor = 'Q'
-            else:
-                piecetolookfor = 'q'
-        if piece == Pieces.King:
-            if self.MoveTurn == self.W:
-                piecetolookfor = 'K'
-            else:
-                piecetolookfor = 'k'
-        if piece == Pieces.Rook:
-            if self.MoveTurn == self.W:
-                piecetolookfor = 'R'
-            else:
-                piecetolookfor = 'r'
+        
+
             
         
 
@@ -309,11 +285,11 @@ class ChessBoard:
                                   listpieces = fenranks[i]
                                   if listpieces[j].isdigit()== True:
                                      filepos +=  int(listpieces[j]) 
-                                  if listpieces[j] == piecetolookfor:
+                                  if listpieces[j] == self.piecetomove:
                                       orgpos = PiecePosition(i,filepos)
                                       filepos += 1
                                       originalpos.append(orgpos)
-                                  if listpieces[j].isdigit()== False and listpieces[j] != piecetolookfor:
+                                  if listpieces[j].isdigit()== False and listpieces[j] != self.piecetomove:
                                       filepos += 1
 
 
