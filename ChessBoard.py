@@ -1,6 +1,7 @@
 from Pieces import PieceParser
 from Pieces import Pieces
 from Pieces import PiecePosition
+from FenBuilder import FenBuilder
 
 
 class ChessBoard:
@@ -68,40 +69,44 @@ class ChessBoard:
         self.OriginalFile = []
 
     def genFEN(self):
-        fen = ''
+        
         EMPTYSQUARE = ''
         ALLSQUARES_EMPTY_INROW = 8
         startingrow = 7
         startingcol = 0
-        emptySquaresCount = 0
-
+        
+        fenbuilder = FenBuilder(self.Board)
         for rank in [7,6,5,4,3,2,1,0]:
             if rank < 7:
-                fen += '/'
+                fenbuilder.fen += '/'
             for afile in range(startingcol,8):
+
                 if self.Board[rank][afile] == EMPTYSQUARE:
-                    emptySquaresCount += 1
-                elif emptySquaresCount > 0 and self.Board[rank][afile] != EMPTYSQUARE:
-                    fen += str(emptySquaresCount)
-                    emptySquaresCount = 0
-                    fen += self.Board[rank][afile]
+                    fenbuilder.build_fen_whenemptysqure()
+                elif fenbuilder.emptySquaresCount > 0 and self.Board[rank][afile] != EMPTYSQUARE:
+                    fenbuilder.build_fen_when_a_pieceexists_afteremptysquares(rank,afile)
                 else:
-                    fen += self.Board[rank][afile]
-                if emptySquaresCount == ALLSQUARES_EMPTY_INROW:
-                    fen += str(emptySquaresCount)
-                    emptySquaresCount = 0
-                elif emptySquaresCount > 0 and afile == 7 and self.Board[rank][afile] == EMPTYSQUARE:
-                    fen += str(emptySquaresCount)
-                    emptySquaresCount = 0
+                    fenbuilder.build_fen_when_a_pieceexists(rank,afile)
+                    
+                    
+                #fenbuilder.build_fen_when_a_pieceexists_afteremptysquares(rank,afile) if fenbuilder.emptySquaresCount > 0 and self.Board[rank][afile] != EMPTYSQUARE
+                if fenbuilder.emptySquaresCount == ALLSQUARES_EMPTY_INROW:
+                    fenbuilder.fen += str(fenbuilder.emptySquaresCount)
+                    fenbuilder.emptySquaresCount = 0
+                elif fenbuilder.emptySquaresCount > 0 and afile == 7 and self.Board[rank][afile] == EMPTYSQUARE:
+                    fenbuilder.fen += str(fenbuilder.emptySquaresCount)
+                    fenbuilder.emptySquaresCount = 0
            
 
 
         self.MoveTurn = self.B if self.MoveTurn == self.W else self.W
 
-        self.currentfen = fen
-        return fen
+        self.currentfen = fenbuilder.fen
+        return self.currentfen
 
+   
     
+        
     def evaluatePieceToMove(self,pieceToMove):
         whitepieces = {Pieces.Pawn : self.WhitePawn , Pieces.Knight : self.WhiteKnight, Pieces.Bishop: self.WhiteBishop, Pieces.Queen : self.WhiteQueen,
                        Pieces.King : self.WhiteKing, Pieces.Rook : self.WhiteRook}
