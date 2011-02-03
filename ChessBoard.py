@@ -6,8 +6,7 @@ import chessrules
 
 
 class ChessBoard:
-    W = chessrules.itiswhites_move()
-    B = chessrules.itisblacks_move()
+    
     BlackPawn = 'p'
     WhitePawn = 'P'
     WhiteKing = 'K'
@@ -52,7 +51,7 @@ class ChessBoard:
         for bfile in range(0,8):
             self.Board[6][bfile] = self.BlackPawn
 
-        self.MoveTurn = self.W
+        self.MoveTurn = chessrules.itiswhites_move()
         self.PawnCaptureByPawn = False
         self.currentfen = ''
         self.OriginalFile = []
@@ -89,7 +88,7 @@ class ChessBoard:
            
 
 
-        self.MoveTurn = self.B if self.MoveTurn == self.W else self.W
+        self.MoveTurn = chessrules.itisblacks_move() if self.MoveTurn == chessrules.itiswhites_move() else chessrules.itiswhites_move()
 
         self.currentfen = fenbuilder.fen
         return self.currentfen
@@ -104,7 +103,7 @@ class ChessBoard:
                        Pieces.King : self.BlackKing, Pieces.Rook : self.BlackRook}
 
         
-        return whitepieces[pieceToMove] if self.MoveTurn == self.W else blackpieces[pieceToMove]
+        return whitepieces[pieceToMove] if self.MoveTurn == chessrules.itiswhites_move() else blackpieces[pieceToMove]
        
 
    
@@ -216,13 +215,13 @@ class ChessBoard:
         originalpos = []
         ##for pawn
         if piece == 'P':
-            if self.MoveTurn == self.W:
+            if self.MoveTurn == chessrules.itiswhites_move():
                 for i in range(0,8):
                     if self.Board[i][fil] == self.WhitePawn:
                         ranks.append(i)
-            if self.MoveTurn == self.B:
+            if self.MoveTurn == chessrules.itisblacks_move():
                 for i in range(0,8):
-                    if self.Board[i][fil] == self.BlackPawn:
+                    if self.Board[i][fil] == chessrules.itisblacks_move():
                         
                         ranks.append(i)
          
@@ -230,7 +229,7 @@ class ChessBoard:
         if len(ranks) == 1 and self.PawnCaptureByPawn == False:
             originalpos.append(ranks[0])
             originalpos.append(fil)
-        elif len(ranks) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == self.B:
+        elif len(ranks) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == chessrules.itisblacks_move():
        
             originalpos.append(newsquare[0] + 1)
             if move[2] > move[0]:
@@ -239,14 +238,14 @@ class ChessBoard:
                 originalpos.append(fil + 1)
                 
             
-        elif len(ranks) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == self.W:
+        elif len(ranks) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == chessrules.itiswhites_move():
             originalpos.append(newsquare[0] - 1)
             originalpos.append(fil - 1)
         #this handles case when a pawn is captured ona file where there are no pawns of that color    
-        elif len(ranks) == 0 and self.PawnCaptureByPawn == True and self.MoveTurn == self.W:
+        elif len(ranks) == 0 and self.PawnCaptureByPawn == True and self.MoveTurn == chessrules.itiswhites_move():
             originalpos.append(newsquare[0] - 1)
             originalpos.append(fil + 1)
-        elif len(ranks) == 0 and self.PawnCaptureByPawn == True and self.MoveTurn == self.B:
+        elif len(ranks) == 0 and self.PawnCaptureByPawn == True and self.MoveTurn == chessrules.itisblacks_move():
             originalpos.append(newsquare[0] + 1)
             originalpos.append(fil - 1)
             
