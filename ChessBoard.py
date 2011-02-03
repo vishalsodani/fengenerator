@@ -136,24 +136,24 @@ class ChessBoard:
                 
             self.Board[destSquare[0]][destSquare[1]] = self.piecetomove
             if typeofpieceToMove == Pieces.Pawn:
-                self.Board[orgSquare[0]][orgSquare[1]] = ''
+                self.Board[orgSquare[0]][orgSquare[1]] = chessrules.makesquare_blank()
             elif typeofpieceToMove == Pieces.Knight:
 
 
                 if len(self.OriginalFile) == 1:
                     for pp in orgSquare:
                         if pp.filep == self.OriginalFile[0]:
-                            self.Board[pp.rank][pp.filep]= ''
+                            self.Board[pp.rank][pp.filep]= chessrules.makesquare_blank()
                         
                 else:
                     
                     for pp in orgSquare:
                     
                         if (pp.filep - destSquare[1] == 1 or pp.filep - destSquare[1] == -1) and  abs(pp.rank - destSquare[0]) == 2:
-                            self.Board[pp.rank][pp.filep]=''
+                            self.Board[pp.rank][pp.filep]=chessrules.makesquare_blank()
                         if destSquare[0] - pp.rank == 1 and  pp.filep - destSquare[1] == 2:
                 
-                            self.Board[pp.rank][pp.filep]=''
+                            self.Board[pp.rank][pp.filep]=chessrules.makesquare_blank()
                         if abs(destSquare[0] - pp.rank == 1) and  abs(pp.filep - destSquare[1]) == 2:
                             self.Board[pp.rank][pp.filep]=''
             elif typeofpieceToMove == Pieces.Bishop:
@@ -165,9 +165,9 @@ class ChessBoard:
                 for pp in orgSquare:
                     sum = pp.rank + pp.filep + 7
                     if  sum % 2 == 0 and evensq == True:
-                        self.Board[pp.rank][pp.filep] = ''
+                        self.Board[pp.rank][pp.filep] = chessrules.makesquare_blank()
                     elif sum % 2 != 0 and evensq == False:
-                        self.Board[pp.rank][pp.filep] = ''
+                        self.Board[pp.rank][pp.filep] = chessrules.makesquare_blank()
             elif typeofpieceToMove == Pieces.Queen or typeofpieceToMove == Pieces.King:
                 self.Board[orgSquare[0].rank][orgSquare[0].filep]= ''
             elif typeofpieceToMove == Pieces.Rook:
@@ -197,7 +197,7 @@ class ChessBoard:
                         elif diffsqfile == 0:
                             whichrook = rook
                             break
-                self.Board[whichrook.rank][whichrook.filep]=""
+                self.Board[whichrook.rank][whichrook.filep]=chessrules.makesquare_blank()
                             
                     
         
