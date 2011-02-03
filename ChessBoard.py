@@ -114,13 +114,11 @@ class ChessBoard:
         #parse first character of string to know the piece
         #whose move
         if chessrules.iswhite_kingside_castling(move,self.MoveTurn):
-            self.Board[0][4]=''
-            self.Board[0][7]=''
+            self.Board[0][4]=self.Board[0][7]=chessrules.makesquare_blank()
             self.Board[0][5]=self.WhiteRook
             self.Board[0][6]=self.WhiteKing
         elif chessrules.isblack_kingside_castling(move,self.MoveTurn):
-            self.Board[7][4]=''
-            self.Board[7][7]=''
+            self.Board[7][4]=self.Board[7][7]=chessrules.makesquare_blank()
             self.Board[7][5]=self.BlackRook
             self.Board[7][6]=self.BlackKing
         else:    

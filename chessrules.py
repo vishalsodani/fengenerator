@@ -6,3 +6,5 @@ def itiswhites_move():
     return 'White'
 def itisblacks_move():
     return 'Black'
+def makesquare_blank():
+    return ''
