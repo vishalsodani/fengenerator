@@ -3,6 +3,7 @@ from Pieces import Pieces
 from Pieces import PiecePosition
 from FenBuilder import FenBuilder
 import chessrules
+import chessnotation
 
 
 class ChessBoard:
@@ -293,7 +294,7 @@ class ChessBoard:
         self.PawnCaptureByPawn = False
         self.OriginalFile=[]
         if pieceToMove == Pieces.Pawn:
-            if chessrules.CAPTURE_ACTION in move:
+            if chessnotation.CAPTURE_ACTION in move:
                 destFile = self.Files.index(move[2])
                 destRank = int(move[3])-1
                 self.PawnCaptureByPawn = True
@@ -303,12 +304,12 @@ class ChessBoard:
         
             
         else:
-            if chessrules.CAPTURE_ACTION in move:
+            if chessnotation.CAPTURE_ACTION in move:
                 destFile = self.Files.index(move[2])
                 destRank = int(move[3])-1
         
             else:
-                hasplus = chessrules.CHECK_ACTION in move
+                hasplus = chessnotation.CHECK_ACTION in move
                 if len(move) == 4 and hasplus == False:
                     self.OriginalFile.append(self.Files.index(move[1]))
                     destFile = self.Files.index(move[2])
