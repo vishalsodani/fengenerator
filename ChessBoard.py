@@ -293,7 +293,7 @@ class ChessBoard:
         self.PawnCaptureByPawn = False
         self.OriginalFile=[]
         if pieceToMove == Pieces.Pawn:
-            if 'x' in move:
+            if chessrules.CAPTURE_ACTION in move:
                 destFile = self.Files.index(move[2])
                 destRank = int(move[3])-1
                 self.PawnCaptureByPawn = True
@@ -303,12 +303,12 @@ class ChessBoard:
         
             
         else:
-            if 'x' in move:
+            if chessrules.CAPTURE_ACTION in move:
                 destFile = self.Files.index(move[2])
                 destRank = int(move[3])-1
         
             else:
-                hasplus = '+' in move
+                hasplus = chessrules.CHECK_ACTION in move
                 if len(move) == 4 and hasplus == False:
                     self.OriginalFile.append(self.Files.index(move[1]))
                     destFile = self.Files.index(move[2])

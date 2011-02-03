@@ -8,3 +8,7 @@ def itisblacks_move():
     return 'Black'
 def makesquare_blank():
     return ''
+
+
+CAPTURE_ACTION = 'x'
+CHECK_ACTION = '+'
