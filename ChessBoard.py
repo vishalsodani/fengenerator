@@ -2,11 +2,12 @@ from Pieces import PieceParser
 from Pieces import Pieces
 from Pieces import PiecePosition
 from FenBuilder import FenBuilder
+import chessrules
 
 
 class ChessBoard:
-    W = 'White'
-    B = 'Black'
+    W = chessrules.itiswhites_move()
+    B = chessrules.itisblacks_move()
     BlackPawn = 'p'
     WhitePawn = 'P'
     WhiteKing = 'K'
@@ -105,17 +106,19 @@ class ChessBoard:
         
         return whitepieces[pieceToMove] if self.MoveTurn == self.W else blackpieces[pieceToMove]
        
+
+   
     
     def MovePieceTo(self,move):
         #whats the piece, figure out original position n new position
         #parse first character of string to know the piece
         #whose move
-        if move == 'O-O' and self.MoveTurn == self.W:
+        if chessrules.iswhite_kingside_castling(move,self.MoveTurn):
             self.Board[0][4]=''
             self.Board[0][7]=''
             self.Board[0][5]=self.WhiteRook
             self.Board[0][6]=self.WhiteKing
-        elif move == 'O-O' and self.MoveTurn == self.B:
+        elif chessrules.isblack_kingside_castling(move,self.MoveTurn):
             self.Board[7][4]=''
             self.Board[7][7]=''
             self.Board[7][5]=self.BlackRook
