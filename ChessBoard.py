@@ -35,15 +35,9 @@ class ChessBoard:
         self.Board[0][7] = self.WhiteRook
         
         
+        for bfile in range(0,8):
+            self.Board[1][bfile] = self.WhitePawn
 
-        self.Board[1][0] = self.WhitePawn
-        self.Board[1][1] = self.WhitePawn
-        self.Board[1][2] = self.WhitePawn
-        self.Board[1][3] = self.WhitePawn
-        self.Board[1][4] = self.WhitePawn
-        self.Board[1][5] = self.WhitePawn
-        self.Board[1][6] = self.WhitePawn
-        self.Board[1][7] = self.WhitePawn
 
         self.Board[7][0] = self.BlackRook
         self.Board[7][1] = self.BlackKnight
@@ -54,15 +48,9 @@ class ChessBoard:
         self.Board[7][6] = self.BlackKnight
         self.Board[7][7] = self.BlackRook
         
+        for bfile in range(0,8):
+            self.Board[6][bfile] = self.BlackPawn
 
-        self.Board[6][0] = self.BlackPawn
-        self.Board[6][1] = self.BlackPawn
-        self.Board[6][2] = self.BlackPawn
-        self.Board[6][3] = self.BlackPawn
-        self.Board[6][4] = self.BlackPawn
-        self.Board[6][5] = self.BlackPawn
-        self.Board[6][6] = self.BlackPawn
-        self.Board[6][7] = self.BlackPawn
         self.MoveTurn = self.W
         self.PawnCaptureByPawn = False
         self.currentfen = ''
