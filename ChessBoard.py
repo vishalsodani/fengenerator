@@ -108,7 +108,74 @@ class ChessBoard:
         return whitepieces[pieceToMove] if self.MoveTurn == self.W else blackpieces[pieceToMove]
        
 
-   
+    def handlePawnMovement(self,orgSquare):
+        self.Board[orgSquare[0]][orgSquare[1]] = chessrules.makesquare_blank()
+    def handleKnightMovement(self,orgSquare,destSquare):
+
+            if len(self.OriginalFile) == 1:
+                    for pp in orgSquare:
+                        if pp.filep == self.OriginalFile[0]:
+                            self.Board[pp.rank][pp.filep]= chessrules.makesquare_blank()
+                        
+            else:
+
+                    for pp in orgSquare:
+
+                        if (pp.filep - destSquare[1] == 1 or pp.filep - destSquare[1] == -1) and  abs(pp.rank - destSquare[0]) == 2:
+                           
+                            self.Board[pp.rank][pp.filep]=chessrules.makesquare_blank()
+                        if destSquare[0] - pp.rank == 1 and  pp.filep - destSquare[1] == 2:
+                            
+                            self.Board[pp.rank][pp.filep]=chessrules.makesquare_blank()
+                        if abs(destSquare[0] - pp.rank) == 1 and  abs(pp.filep - destSquare[1]) == 2:
+
+                            self.Board[pp.rank][pp.filep]=''
+                            
+    def handleBishopMovement(self,destSquare,orgSquare):
+
+        # find if original square n destdquare are even or odd
+                evensq = True
+                if ((destSquare[0] + destSquare[1] + 7) % 2) != 0:
+                    evensq = False
+                
+                for pp in orgSquare:
+                    sum = pp.rank + pp.filep + 7
+                    if  sum % 2 == 0 and evensq == True:
+                        self.Board[pp.rank][pp.filep] = chessrules.makesquare_blank()
+                    elif sum % 2 != 0 and evensq == False:
+                        self.Board[pp.rank][pp.filep] = chessrules.makesquare_blank()
+    def handleQueenKingMovement(self,orgSquare):
+        self.Board[orgSquare[0].rank][orgSquare[0].filep]= ''
+
+    def handleRookMovement(self,orgSquare,destSquare):
+        
+        if len(self.OriginalFile) == 1:
+                    for rook in orgSquare:
+                        if rook.filep == self.OriginalFile[0]:
+                            whichrook = rook
+
+                 
+        elif len(orgSquare) >= 1:
+                    
+                    #is it horizontal movement, if both rooks are on same rank in original position
+                    for rook in orgSquare:
+                        whichrook = rook
+                        diffsqrank = abs(rook.rank - destSquare[0])
+                        diffsqfile = abs(rook.filep - destSquare[1])
+                        if diffsqrank == 0 and diffsqfile == 1:
+                            whichrook= rook
+                            break
+                        elif diffsqrank == 0:
+                            for ifile in range(1,diffsqfile):
+                                if self.Board[rook.rank][rook.filep + 1] != "":
+                                    break
+                                else:
+                                    whichrook = rook
+                        #same file movement,vertical rook movement
+                        elif diffsqfile == 0:
+                            whichrook = rook
+                            break
+        self.Board[whichrook.rank][whichrook.filep]=chessrules.makesquare_blank()
     
     def MovePieceTo(self,move):
         #whats the piece, figure out original position n new position
@@ -142,76 +209,25 @@ class ChessBoard:
                 orgSquare = self.getOriginalPosition(typeofpieceToMove,destSquare,move)
             else:
                 orgSquare = self.getOriginalPositionForKnight(typeofpieceToMove,destSquare)
+                
             self.Board[destSquare[0]][destSquare[1]] = self.piecetomove
+            
             if typeofpieceToMove == Pieces.Pawn:
-                self.Board[orgSquare[0]][orgSquare[1]] = chessrules.makesquare_blank()
+                self.handlePawnMovement(orgSquare)
             elif typeofpieceToMove == Pieces.Knight:
-
-                
-                if len(self.OriginalFile) == 1:
-                    for pp in orgSquare:
-                        if pp.filep == self.OriginalFile[0]:
-                            self.Board[pp.rank][pp.filep]= chessrules.makesquare_blank()
-                        
-                else:
-
-                    for pp in orgSquare:
-
-                        if (pp.filep - destSquare[1] == 1 or pp.filep - destSquare[1] == -1) and  abs(pp.rank - destSquare[0]) == 2:
-                           
-                            self.Board[pp.rank][pp.filep]=chessrules.makesquare_blank()
-                        if destSquare[0] - pp.rank == 1 and  pp.filep - destSquare[1] == 2:
-                            
-                            self.Board[pp.rank][pp.filep]=chessrules.makesquare_blank()
-                        if abs(destSquare[0] - pp.rank) == 1 and  abs(pp.filep - destSquare[1]) == 2:
-
-                            self.Board[pp.rank][pp.filep]=''
+                self.handleKnightMovement(orgSquare,destSquare)
             elif typeofpieceToMove == Pieces.Bishop:
-                # find if original square n destdquare are even or odd
-                evensq = True
-                if ((destSquare[0] + destSquare[1] + 7) % 2) != 0:
-                    evensq = False
-                
-                for pp in orgSquare:
-                    sum = pp.rank + pp.filep + 7
-                    if  sum % 2 == 0 and evensq == True:
-                        self.Board[pp.rank][pp.filep] = chessrules.makesquare_blank()
-                    elif sum % 2 != 0 and evensq == False:
-                        self.Board[pp.rank][pp.filep] = chessrules.makesquare_blank()
+                self.handleBishopMovement(destSquare,orgSquare)
             elif typeofpieceToMove == Pieces.Queen or typeofpieceToMove == Pieces.King:
-                self.Board[orgSquare[0].rank][orgSquare[0].filep]= ''
+                self.handleQueenKingMovement(orgSquare)
             elif typeofpieceToMove == Pieces.Rook:
-
-                if len(self.OriginalFile) == 1:
-                    for rook in orgSquare:
-                        if rook.filep == self.OriginalFile[0]:
-                            whichrook = rook
+                self.handleRookMovement(orgSquare,destSquare)
                 
-                elif len(orgSquare) >= 1:
-                    
-                    #is it horizontal movement, if both rooks are on same rank in original position
-                    for rook in orgSquare:
-                        whichrook = rook
-                        diffsqrank = abs(rook.rank - destSquare[0])
-                        diffsqfile = abs(rook.filep - destSquare[1])
-                        if diffsqrank == 0 and diffsqfile == 1:
-                            whichrook= rook
-                            break
-                        elif diffsqrank == 0:
-                            for ifile in range(1,diffsqfile):
-                                if self.Board[rook.rank][rook.filep + 1] != "":
-                                    break
-                                else:
-                                    whichrook = rook
-                        #same file movement,vertical rook movement
-                        elif diffsqfile == 0:
-                            whichrook = rook
-                            break
-                self.Board[whichrook.rank][whichrook.filep]=chessrules.makesquare_blank()
-                            
                     
         
-            
+
+        
+       
     def get_file_of_newsquare(self,newsquare):
         return newsquare[1]
 
