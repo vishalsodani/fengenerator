@@ -122,6 +122,14 @@ class ChessBoard:
             self.Board[7][4]=self.Board[7][7]=chessrules.makesquare_blank()
             self.Board[7][5]=self.BlackRook
             self.Board[7][6]=self.BlackKing
+        elif chessrules.iswhite_queenside_castling(move,self.MoveTurn):
+            self.Board[0][4]=self.Board[0][0]=chessrules.makesquare_blank()
+            self.Board[0][3]=self.WhiteRook
+            self.Board[0][2]=self.WhiteKing
+        elif chessrules.isblack_queenside_castling(move,self.MoveTurn):
+            self.Board[7][4]=self.Board[7][0]=chessrules.makesquare_blank()
+            self.Board[7][3]=self.BlackRook
+            self.Board[7][2]=self.BlackKing
         else:    
             typeofpieceToMove = PieceParser().getPieceMoved(move)
             
@@ -140,22 +148,24 @@ class ChessBoard:
                 self.Board[orgSquare[0]][orgSquare[1]] = chessrules.makesquare_blank()
             elif typeofpieceToMove == Pieces.Knight:
 
-
+                
                 if len(self.OriginalFile) == 1:
                     for pp in orgSquare:
                         if pp.filep == self.OriginalFile[0]:
                             self.Board[pp.rank][pp.filep]= chessrules.makesquare_blank()
                         
                 else:
-                    
+
                     for pp in orgSquare:
-                    
+
                         if (pp.filep - destSquare[1] == 1 or pp.filep - destSquare[1] == -1) and  abs(pp.rank - destSquare[0]) == 2:
+                           
                             self.Board[pp.rank][pp.filep]=chessrules.makesquare_blank()
                         if destSquare[0] - pp.rank == 1 and  pp.filep - destSquare[1] == 2:
-                
+                            
                             self.Board[pp.rank][pp.filep]=chessrules.makesquare_blank()
-                        if abs(destSquare[0] - pp.rank == 1) and  abs(pp.filep - destSquare[1]) == 2:
+                        if abs(destSquare[0] - pp.rank) == 1 and  abs(pp.filep - destSquare[1]) == 2:
+
                             self.Board[pp.rank][pp.filep]=''
             elif typeofpieceToMove == Pieces.Bishop:
                 # find if original square n destdquare are even or odd
@@ -178,7 +188,7 @@ class ChessBoard:
                         if rook.filep == self.OriginalFile[0]:
                             whichrook = rook
                 
-                elif len(orgSquare) > 1:
+                elif len(orgSquare) >= 1:
                     
                     #is it horizontal movement, if both rooks are on same rank in original position
                     for rook in orgSquare:
@@ -209,8 +219,10 @@ class ChessBoard:
     def getOriginalPosition(self,piece,newsquare,move):
         #if its pawn can move one or 2 squares #which file how many pawns on that file
 
-        
+
         fil = self.get_file_of_newsquare(newsquare)
+        
+
         ranks = []
         originalpos = []
         ##for pawn
@@ -222,15 +234,15 @@ class ChessBoard:
             if self.MoveTurn == self.B:
                 for i in range(0,8):
                     if self.Board[i][fil] == self.BlackPawn:
-                        
                         ranks.append(i)
-         
-       
+
+
         if len(ranks) == 1 and self.PawnCaptureByPawn == False:
+          
             originalpos.append(ranks[0])
             originalpos.append(fil)
         elif len(ranks) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == self.B:
-       
+           
             originalpos.append(newsquare[0] + 1)
             if move[2] > move[0]:
                 originalpos.append(fil - 1)
@@ -246,12 +258,20 @@ class ChessBoard:
             originalpos.append(newsquare[0] - 1)
             originalpos.append(fil + 1)
         elif len(ranks) == 0 and self.PawnCaptureByPawn == True and self.MoveTurn == self.B:
+         
             originalpos.append(newsquare[0] + 1)
-            originalpos.append(fil - 1)
-            
+            filedict = {'a':0,'b':1,'c':2,'d':3, 'e':4 ,'f':5, 'g':6, 'h':7}
+            originalpos.append(filedict[move[0]])
+        elif len(ranks) == 2 and self.MoveTurn == self.B:
+         
+            originalpos.append(newsquare[0] + 1)
+            originalpos.append(fil)
  
  
-        
+          
+ 
+ 
+
         
         return originalpos
 
