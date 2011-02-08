@@ -223,56 +223,41 @@ class ChessBoard:
         
 
         ranks = []
-        originalpos = []
+        originalposofPawn = []
         ##for pawn
-        if piece == 'P':
-            if self.MoveTurn == self.W:
-                for i in range(0,8):
-                    if self.Board[i][fil] == self.WhitePawn:
-                        ranks.append(i)
-            if self.MoveTurn == self.B:
-                for i in range(0,8):
-                    if self.Board[i][fil] == self.BlackPawn:
-                        ranks.append(i)
-
-        if len(ranks) == 1 and self.PawnCaptureByPawn == False:
+        NoOfPawnsInAFile = self.getNoOfPawnsInAFile(fil,ranks)
+        
+        if len(NoOfPawnsInAFile) == 1 and self.PawnCaptureByPawn == False:
           
-            originalpos.append(ranks[0])
-            originalpos.append(fil)
-        elif len(ranks) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == self.B:
+            originalposofPawn.append(NoOfPawnsInAFile[0])
+            originalposofPawn.append(fil)
+        elif len(NoOfPawnsInAFile) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == self.B:
            
-            originalpos.append(newsquare[0] + 1)
+            originalposofPawn.append(newsquare[0] + 1)
             if move[2] > move[0]:
-                originalpos.append(fil - 1)
+                originalposofPawn.append(fil - 1)
             else:
-                originalpos.append(fil + 1)
+                originalposofPawn.append(fil + 1)
                 
             
-        elif len(ranks) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == self.W:
-            originalpos.append(newsquare[0] - 1)
-            originalpos.append(self.Files.index(move[0]))
+        elif len(NoOfPawnsInAFile) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == self.W:
+            originalposofPawn.append(newsquare[0] - 1)
+            originalposofPawn.append(self.Files.index(move[0]))
         #this handles case when a pawn is captured ona file where there are no pawns of that color    
-        elif len(ranks) == 0 and self.PawnCaptureByPawn == True and self.MoveTurn == self.W:
-            originalpos.append(newsquare[0] - 1)
-            originalpos.append(self.Files.index(move[0]))
-        elif len(ranks) == 0 and self.PawnCaptureByPawn == True and self.MoveTurn == self.B:
-            originalpos.append(newsquare[0] + 1)
-            originalpos.append(self.Files.index(move[0]))
-        elif len(ranks) == 2: 
+        elif len(NoOfPawnsInAFile) == 0 and self.PawnCaptureByPawn == True and self.MoveTurn == self.W:
+            originalposofPawn.append(newsquare[0] - 1)
+            originalposofPawn.append(self.Files.index(move[0]))
+        elif len(NoOfPawnsInAFile) == 0 and self.PawnCaptureByPawn == True and self.MoveTurn == self.B:
+            originalposofPawn.append(newsquare[0] + 1)
+            originalposofPawn.append(self.Files.index(move[0]))
+        elif len(NoOfPawnsInAFile) == 2: 
             for rnk in ranks:
                 if rnk -  newsquare[0]== 1 and self.MoveTurn == self.B or  rnk -  newsquare[0]== -1 and self.MoveTurn == self.W:
-                    originalpos.append(rnk)
-                    originalpos.append(fil)
+                    originalposofPawn.append(rnk)
+                    originalposofPawn.append(fil)
 
-
- 
- 
-          
- 
- 
-
-        
-        return originalpos
+       
+        return originalposofPawn
 
     def getOriginalPositionForKnight(self,piece,newsquare):
         fenranks = self.currentfen.split('/')
@@ -339,6 +324,17 @@ class ChessBoard:
         destList.append(destRank)
         destList.append(destFile)
         return destList
+
+    def getNoOfPawnsInAFile(self,bfile,ranks):
+        if self.MoveTurn == self.W:
+            for i in range(0,8):
+                if self.Board[i][bfile] == self.WhitePawn:
+                    ranks.append(i)
+        if self.MoveTurn == self.B:
+            for i in range(0,8):
+                if self.Board[i][bfile] == self.BlackPawn:
+                    ranks.append(i)
+        return ranks
             
 
         
