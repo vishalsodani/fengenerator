@@ -176,57 +176,82 @@ class ChessBoard:
                             whichrook = rook
                             break
         self.Board[whichrook.rank][whichrook.filep]=chessrules.makesquare_blank()
+
+    def handleWhiteKingSideCastling(self):
+       self.Board[0][4]=self.Board[0][7]=chessrules.makesquare_blank()
+       self.Board[0][5]=self.WhiteRook
+       self.Board[0][6]=self.WhiteKing
+       
+    def handleWhiteQueenSideCastling(self):
+       self.Board[0][4]=self.Board[0][0]=chessrules.makesquare_blank()
+       self.Board[0][3]=self.WhiteRook
+       self.Board[0][2]=self.WhiteKing
+       
+    def handleBlackKingSideCastling(self):
+       self.Board[7][4]=self.Board[7][7]=chessrules.makesquare_blank()
+       self.Board[7][5]=self.BlackRook
+       self.Board[7][6]=self.BlackKing
+       
+    def handleBlackQueenSideCastling(self):
+       self.Board[7][4]=self.Board[7][0]=chessrules.makesquare_blank()
+       self.Board[7][3]=self.BlackRook
+       self.Board[7][2]=self.BlackKing
     
     def MovePieceTo(self,move):
         #whats the piece, figure out original position n new position
         #parse first character of string to know the piece
         #whose move
         if chessrules.iswhite_kingside_castling(move,self.MoveTurn):
-            self.Board[0][4]=self.Board[0][7]=chessrules.makesquare_blank()
-            self.Board[0][5]=self.WhiteRook
-            self.Board[0][6]=self.WhiteKing
+            self.handleWhiteKingSideCastling()
         elif chessrules.isblack_kingside_castling(move,self.MoveTurn):
-            self.Board[7][4]=self.Board[7][7]=chessrules.makesquare_blank()
-            self.Board[7][5]=self.BlackRook
-            self.Board[7][6]=self.BlackKing
+            self.handleBlackKingSideCastling()
         elif chessrules.iswhite_queenside_castling(move,self.MoveTurn):
-            self.Board[0][4]=self.Board[0][0]=chessrules.makesquare_blank()
-            self.Board[0][3]=self.WhiteRook
-            self.Board[0][2]=self.WhiteKing
+            self.handleWhiteQueenSideCastling()
         elif chessrules.isblack_queenside_castling(move,self.MoveTurn):
-            self.Board[7][4]=self.Board[7][0]=chessrules.makesquare_blank()
-            self.Board[7][3]=self.BlackRook
-            self.Board[7][2]=self.BlackKing
-        else:    
-            typeofpieceToMove = PieceParser().getPieceMoved(move)
-            
-            self.piecetomove = self.evaluatePieceToMove(typeofpieceToMove)
-            
-            destSquare = self.getDestinationSquare(move,typeofpieceToMove)
-     
-            
-            if typeofpieceToMove == Pieces.Pawn:
-                orgSquare = self.getOriginalPosition(typeofpieceToMove,destSquare,move)
-            else:
-                orgSquare = self.getOriginalPositionForKnight(typeofpieceToMove,destSquare)
-                
-            self.Board[destSquare[0]][destSquare[1]] = self.piecetomove
-            
-            if typeofpieceToMove == Pieces.Pawn:
-                self.handlePawnMovement(orgSquare)
-            elif typeofpieceToMove == Pieces.Knight:
-                self.handleKnightMovement(orgSquare,destSquare)
-            elif typeofpieceToMove == Pieces.Bishop:
-                self.handleBishopMovement(destSquare,orgSquare)
-            elif typeofpieceToMove == Pieces.Queen or typeofpieceToMove == Pieces.King:
-                self.handleQueenKingMovement(orgSquare)
-            elif typeofpieceToMove == Pieces.Rook:
-                self.handleRookMovement(orgSquare,destSquare)
-                
-                    
+            self.handleBlackQueenSideCastling()
+        else:
+            self.handleMove(move)
+        '''
+                  or ( and ) \
+                  or ( and ) \
+                  or ( and )\
+                             or (self.handleMove(move))
+        makemove = lambda move: (chessrules.iswhite_kingside_castling(move,self.MoveTurn) and self.handleWhiteKingSideCastling()) \
+                  or (chessrules.isblack_kingside_castling(move,self.MoveTurn) and self.handleBlackKingSideCastling()) \
+                  or (chessrules.iswhite_queenside_castling(move,self.MoveTurn) and self.handleWhiteQueenSideCastling()) \
+                  or (chessrules.isblack_queenside_castling(move,self.MoveTurn) and self.handleBlackQueenSideCastling())\
+                             or ()
+        
+        makemove(move)
+           '''         
         
 
-        
+    def handleMove(self,move):
+
+        typeofpieceToMove = PieceParser().getPieceMoved(move)
+            
+        self.piecetomove = self.evaluatePieceToMove(typeofpieceToMove)
+            
+        destSquare = self.getDestinationSquare(move,typeofpieceToMove)
+     
+            
+        if typeofpieceToMove == Pieces.Pawn:
+            orgSquare = self.getOriginalPosition(typeofpieceToMove,destSquare,move)
+        else:
+            orgSquare = self.getOriginalPositionForKnight(typeofpieceToMove,destSquare)
+                
+        self.Board[destSquare[0]][destSquare[1]] = self.piecetomove
+            
+        if typeofpieceToMove == Pieces.Pawn:
+            self.handlePawnMovement(orgSquare)
+        elif typeofpieceToMove == Pieces.Knight:
+            self.handleKnightMovement(orgSquare,destSquare)
+        elif typeofpieceToMove == Pieces.Bishop:
+             self.handleBishopMovement(destSquare,orgSquare)
+        elif typeofpieceToMove == Pieces.Queen or typeofpieceToMove == Pieces.King:
+             self.handleQueenKingMovement(orgSquare)
+        elif typeofpieceToMove == Pieces.Rook:
+             self.handleRookMovement(orgSquare,destSquare)
        
     def get_file_of_newsquare(self,newsquare):
         return newsquare[1]
