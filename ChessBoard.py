@@ -142,7 +142,6 @@ class ChessBoard:
                 orgSquare = self.getOriginalPosition(typeofpieceToMove,destSquare,move)
             else:
                 orgSquare = self.getOriginalPositionForKnight(typeofpieceToMove,destSquare)
-                
             self.Board[destSquare[0]][destSquare[1]] = self.piecetomove
             if typeofpieceToMove == Pieces.Pawn:
                 self.Board[orgSquare[0]][orgSquare[1]] = chessrules.makesquare_blank()
@@ -236,7 +235,6 @@ class ChessBoard:
                     if self.Board[i][fil] == self.BlackPawn:
                         ranks.append(i)
 
-
         if len(ranks) == 1 and self.PawnCaptureByPawn == False:
           
             originalpos.append(ranks[0])
@@ -252,20 +250,21 @@ class ChessBoard:
             
         elif len(ranks) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == self.W:
             originalpos.append(newsquare[0] - 1)
-            originalpos.append(fil - 1)
+            originalpos.append(self.Files.index(move[0]))
         #this handles case when a pawn is captured ona file where there are no pawns of that color    
         elif len(ranks) == 0 and self.PawnCaptureByPawn == True and self.MoveTurn == self.W:
             originalpos.append(newsquare[0] - 1)
-            originalpos.append(fil + 1)
+            originalpos.append(self.Files.index(move[0]))
         elif len(ranks) == 0 and self.PawnCaptureByPawn == True and self.MoveTurn == self.B:
-         
             originalpos.append(newsquare[0] + 1)
-            filedict = {'a':0,'b':1,'c':2,'d':3, 'e':4 ,'f':5, 'g':6, 'h':7}
-            originalpos.append(filedict[move[0]])
-        elif len(ranks) == 2 and self.MoveTurn == self.B:
-         
-            originalpos.append(newsquare[0] + 1)
-            originalpos.append(fil)
+            originalpos.append(self.Files.index(move[0]))
+        elif len(ranks) == 2: 
+            for rnk in ranks:
+                if rnk -  newsquare[0]== 1 and self.MoveTurn == self.B or  rnk -  newsquare[0]== -1 and self.MoveTurn == self.W:
+                    originalpos.append(rnk)
+                    originalpos.append(fil)
+
+
  
  
           
@@ -321,7 +320,7 @@ class ChessBoard:
             else:
                 destFile = self.Files.index(move[0])
                 destRank = int(move[1])-1
-        
+       
             
         else:
             if chessnotation.CAPTURE_ACTION in move:

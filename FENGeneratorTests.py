@@ -421,6 +421,32 @@ class TestFENGenerator(unittest.TestCase):
 
         FENGen.fen_after_move('c5')
         self.assertEqual('r2qkb1r/pb1n1p2/4pP2/1pp3B1/2pP4/2N3P1/PP3P1P/R2QKB1R',FENGen.fen)
+
+
+    def test_2whitepawansseparatedbyonerank(self):
+        FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
+        FENGen.fen_after_move('e4')
+        FENGen.fen_after_move('d6')
+        FENGen.fen_after_move('f4')
+        FENGen.fen_after_move('e5')
+        self.assertEqual('rnbqkbnr/ppp2ppp/3p4/4p3/4PP2/8/PPPP2PP/RNBQKBNR',FENGen.fen)
+        FENGen.fen_after_move('fxe5')
+        self.assertEqual('rnbqkbnr/ppp2ppp/3p4/4P3/4P3/8/PPPP2PP/RNBQKBNR',FENGen.fen)   
+        FENGen.fen_after_move('c6')
+        self.assertEqual('rnbqkbnr/pp3ppp/2pp4/4P3/4P3/8/PPPP2PP/RNBQKBNR',FENGen.fen)
+        FENGen.fen_after_move('e6')
+        print FENGen.board.Board
+        self.assertEqual('rnbqkbnr/pp3ppp/2ppP3/8/4P3/8/PPPP2PP/RNBQKBNR',FENGen.fen)
+        
+        FENGen.fen_after_move('Nf6')
+        
+      
+        
+        FENGen.fen_after_move('e5')
+        
+        self.assertEqual('rnbqkb1r/pp3ppp/2ppPn2/4P3/8/8/PPPP2PP/RNBQKBNR',FENGen.fen)
+
+
     
         
 
