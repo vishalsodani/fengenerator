@@ -55,7 +55,7 @@ class ChessBoard:
 
         self.MoveTurn = self.W
         self.PawnCaptureByPawn = False
-        self.currentfen = ''
+        self.currentfen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
         self.OriginalFile = []
         self.piecetomove = ''
         self.originalrank = -1 #aaded for rook scenario when 2 rooks on a1 and a5, and move to a3, so this gives which rook moved
@@ -152,11 +152,9 @@ class ChessBoard:
 
         
         if self.originalrank != -1:
-                print move
-                print "test test"
                 originalf = self.Files.index(move[2])
                 self.Board[self.originalrank][originalf]=chessrules.makesquare_blank()
-                self.originalrank = ''
+                self.originalrank = -1
                 
         
         elif len(self.OriginalFile) == 1:
@@ -175,11 +173,19 @@ class ChessBoard:
                             self.Board[rook.rank][rook.filep]=chessrules.makesquare_blank()
                             break
                         elif diffsqrank == 0:
-                            for ifile in range(1,diffsqfile):
-                                if self.Board[rook.rank][rook.filep + 1] != "":
+                            apieceexists = False
+                            startLoop = rook.filep + 1
+                            endLoop = diffsqfile
+                            if (rook.filep  > destSquare[1]): #oh boy!! just check if rooks file is greater than dest file like Rf8 is greater than d8
+                                startLoop = destSquare[1] + 1
+                                endLoop = startLoop + diffsqfile - 1
+                            for ifile in range(startLoop,endLoop):
+                                if self.Board[rook.rank][ifile] != "":
+                                    apieceexists = True
                                     break
-                                else:
+                            if apieceexists == False:
                                     self.Board[rook.rank][rook.filep]=chessrules.makesquare_blank()
+
                         #same file movement,vertical rook movement
                         elif diffsqfile == 0:
                             self.Board[rook.rank][rook.filep]=chessrules.makesquare_blank()
@@ -308,14 +314,14 @@ class ChessBoard:
         ranks = []
         originalpos = []
         
-
+  
             
         
 
         if piece == 'N' or piece == 'B' or piece == 'Q' or piece == 'K' or piece == 'R':
             
             for i in range(0,8):
-                   filepos = 0 
+                   filepos = 0
                    for j in range(0,len(fenranks[i])):
                                   listpieces = fenranks[i]
                                   if listpieces[j].isdigit()== True:

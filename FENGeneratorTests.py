@@ -9,6 +9,10 @@ class TestFENGenerator(unittest.TestCase):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
         self.assertEqual('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR',FENGen.fen)
+    def test_genFEN_AfterInitialPositionNf3(self):
+        FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
+        FENGen.fen_after_move('Nf3')
+        self.assertEqual('rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R',FENGen.fen)
     def test_AfterSecondMove(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -568,9 +572,40 @@ class TestFENGenerator(unittest.TestCase):
 
 
     
-        
+    def test_RooksOn(self):
+            
+        FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
 
         
+        FENGen.fen_after_move('d4')
+        FENGen.fen_after_move('Nf6')
+        FENGen.fen_after_move('c4')
+        FENGen.fen_after_move('g6')
+        FENGen.fen_after_move('Nc3')
+        FENGen.fen_after_move('d5')
+
+        FENGen.fen_after_move('cxd5')
+        FENGen.fen_after_move('Nxd5')
+        FENGen.fen_after_move('e4')
+        FENGen.fen_after_move('Nxc3')
+        FENGen.fen_after_move('bxc3')
+        FENGen.fen_after_move('Bg7')
+        FENGen.fen_after_move('Bc4')
+        FENGen.fen_after_move('c5')
+        FENGen.fen_after_move('Ne2')
+        FENGen.fen_after_move('Nc6')
+        FENGen.fen_after_move('Be3')
+
+        FENGen.fen_after_move('O-O')
+        FENGen.fen_after_move('O-O')
+        self.assertEqual('r1bq1rk1/pp2ppbp/2n3p1/2p5/2BPP3/2P1B3/P3NPPP/R2Q1RK1',FENGen.fen)
+
+        FENGen.fen_after_move('Qc7')
+        FENGen.fen_after_move('Rc1')
+        self.assertEqual('r1b2rk1/ppq1ppbp/2n3p1/2p5/2BPP3/2P1B3/P3NPPP/2RQ1RK1',FENGen.fen)
+        FENGen.fen_after_move('Rd8')
+        print FENGen.board.Board
+        self.assertEqual('r1br2k1/ppq1ppbp/2n3p1/2p5/2BPP3/2P1B3/P3NPPP/2RQ1RK1',FENGen.fen)
 
         
 if __name__ == '__main__':
