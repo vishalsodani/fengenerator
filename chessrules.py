@@ -17,3 +17,7 @@ def isblack_queenside_castling(move,moveturn):
 
 
 
+    
+
+
+

@@ -218,6 +218,7 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('Rfe1')
         
         self.assertEqual('1rb1rbk1/1pqn1ppp/p2pp3/8/P2nPP2/2N1BB2/1PP2QPP/3RR2K',FENGen.fen)
+        
     def test_ForKnightMove_When2KnightsCanmove(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -421,6 +422,40 @@ class TestFENGenerator(unittest.TestCase):
 
         FENGen.fen_after_move('c5')
         self.assertEqual('r2qkb1r/pb1n1p2/4pP2/1pp3B1/2pP4/2N3P1/PP3P1P/R2QKB1R',FENGen.fen)
+        FENGen.fen_after_move('d5')
+        FENGen.fen_after_move('Qb6')
+        FENGen.fen_after_move('Bg2')
+        FENGen.fen_after_move('O-O-O')
+        FENGen.fen_after_move('O-O')
+        FENGen.fen_after_move('b4')
+        FENGen.fen_after_move('Na4')
+
+        FENGen.fen_after_move('Qb5')
+        FENGen.fen_after_move('a3')
+        FENGen.fen_after_move('exd5')
+        FENGen.fen_after_move('axb4')
+
+        FENGen.fen_after_move('cxb4')
+        FENGen.fen_after_move('Be3')
+        FENGen.fen_after_move('Nc5')
+
+        FENGen.fen_after_move('Qg4+')
+        FENGen.fen_after_move('Rd7')
+        FENGen.fen_after_move('Qg7')
+        FENGen.fen_after_move('Bxg7')
+        FENGen.fen_after_move('fxg7')
+
+        FENGen.fen_after_move('Rg8')
+        FENGen.fen_after_move('Nxc5')
+        FENGen.fen_after_move('d4')
+        FENGen.fen_after_move('Bxb7+')
+        FENGen.fen_after_move('Rxb7')
+
+        self.assertEqual('2k3r1/pr3pP1/8/1qN5/1ppp4/4B1P1/1P3P1P/R4RK1',FENGen.fen)
+        
+
+        
+        
 
 
     def test_2whitepawansseparatedbyonerank(self):
@@ -445,6 +480,91 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('e5')
         
         self.assertEqual('rnbqkb1r/pp3ppp/2ppPn2/4P3/8/8/PPPP2PP/RNBQKBNR',FENGen.fen)
+
+    def test_RooksOn_a5_and_a1_moveto_R1a3(self):
+        FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
+        FENGen.fen_after_move('d4')
+        FENGen.fen_after_move('d5')
+        FENGen.fen_after_move('c4')
+        FENGen.fen_after_move('c6')
+        FENGen.fen_after_move('Nc3')
+       
+        FENGen.fen_after_move('Nf6')
+        
+        FENGen.fen_after_move('Nf3')
+      
+        
+        FENGen.fen_after_move('e6')
+       
+      
+        
+        FENGen.fen_after_move('Bg5')
+
+        FENGen.fen_after_move('dxc4')
+        FENGen.fen_after_move('e4')
+        FENGen.fen_after_move('b5')
+        FENGen.fen_after_move('e5')
+        
+        FENGen.fen_after_move('h6')
+
+        FENGen.fen_after_move('Bh4')
+        FENGen.fen_after_move('g5')
+        FENGen.fen_after_move('Nxg5')
+
+        FENGen.fen_after_move('hxg5')
+
+        
+        
+
+        FENGen.fen_after_move('Bxg5')
+
+        FENGen.fen_after_move('Nbd7')
+        FENGen.fen_after_move('exf6')
+
+        FENGen.fen_after_move('Bb7')
+
+        FENGen.fen_after_move('g3')
+        
+
+        FENGen.fen_after_move('c5')
+        FENGen.fen_after_move('d5')
+        FENGen.fen_after_move('Qb6')
+        FENGen.fen_after_move('Bg2')
+        FENGen.fen_after_move('O-O-O')
+        FENGen.fen_after_move('O-O')
+        FENGen.fen_after_move('b4')
+        FENGen.fen_after_move('Na4')
+
+        FENGen.fen_after_move('Qb5')
+        FENGen.fen_after_move('a3')
+        FENGen.fen_after_move('exd5')
+        FENGen.fen_after_move('axb4')
+
+        FENGen.fen_after_move('cxb4')
+        FENGen.fen_after_move('Be3')
+        FENGen.fen_after_move('Nc5')
+
+        FENGen.fen_after_move('Qg4+')
+        FENGen.fen_after_move('Rd7')
+        FENGen.fen_after_move('Qg7')
+        FENGen.fen_after_move('Bxg7')
+        FENGen.fen_after_move('fxg7')
+
+        FENGen.fen_after_move('Rg8')
+        FENGen.fen_after_move('Nxc5')
+        FENGen.fen_after_move('d4')
+        FENGen.fen_after_move('Bxb7+')
+        FENGen.fen_after_move('Rxb7')
+
+        FENGen.fen_after_move('Ra5')
+        FENGen.fen_after_move('f6')
+        FENGen.fen_after_move('Rfa1')
+        FENGen.fen_after_move('Re8')
+        FENGen.fen_after_move('R5a3')
+
+        self.assertEqual('2k1r3/pr4P1/5p2/1qN5/1ppp4/R3B1P1/1P3P1P/R5K1',FENGen.fen)
+        
+
 
 
     

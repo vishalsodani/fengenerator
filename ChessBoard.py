@@ -58,6 +58,7 @@ class ChessBoard:
         self.currentfen = ''
         self.OriginalFile = []
         self.piecetomove = ''
+        self.originalrank = -1 #aaded for rook scenario when 2 rooks on a1 and a5, and move to a3, so this gives which rook moved
 
     def genFEN(self):
         
@@ -144,58 +145,68 @@ class ChessBoard:
                         self.Board[pp.rank][pp.filep] = chessrules.makesquare_blank()
                     elif sum % 2 != 0 and evensq == False:
                         self.Board[pp.rank][pp.filep] = chessrules.makesquare_blank()
-    def handleQueenKingMovement(self,orgSquare):
+    def handleQueenKingMovement(self, orgSquare):
         self.Board[orgSquare[0].rank][orgSquare[0].filep]= ''
 
-    def handleRookMovement(self,orgSquare,destSquare):
+    def handleRookMovement(self, orgSquare, destSquare,move):
+
         
-        if len(self.OriginalFile) == 1:
+        if self.originalrank != -1:
+                print move
+                print "test test"
+                originalf = self.Files.index(move[2])
+                self.Board[self.originalrank][originalf]=chessrules.makesquare_blank()
+                self.originalrank = ''
+                
+        
+        elif len(self.OriginalFile) == 1:
                     for rook in orgSquare:
                         if rook.filep == self.OriginalFile[0]:
-                            whichrook = rook
+                            self.Board[rook.rank][rook.filep]=chessrules.makesquare_blank()
+                            break
 
-                 
         elif len(orgSquare) >= 1:
                     
                     #is it horizontal movement, if both rooks are on same rank in original position
                     for rook in orgSquare:
-                        whichrook = rook
                         diffsqrank = abs(rook.rank - destSquare[0])
                         diffsqfile = abs(rook.filep - destSquare[1])
                         if diffsqrank == 0 and diffsqfile == 1:
-                            whichrook= rook
+                            self.Board[rook.rank][rook.filep]=chessrules.makesquare_blank()
                             break
                         elif diffsqrank == 0:
                             for ifile in range(1,diffsqfile):
                                 if self.Board[rook.rank][rook.filep + 1] != "":
                                     break
                                 else:
-                                    whichrook = rook
+                                    self.Board[rook.rank][rook.filep]=chessrules.makesquare_blank()
                         #same file movement,vertical rook movement
                         elif diffsqfile == 0:
-                            whichrook = rook
+                            self.Board[rook.rank][rook.filep]=chessrules.makesquare_blank()
                             break
-        self.Board[whichrook.rank][whichrook.filep]=chessrules.makesquare_blank()
+               
+       
+        
 
     def handleWhiteKingSideCastling(self):
-       self.Board[0][4]=self.Board[0][7]=chessrules.makesquare_blank()
-       self.Board[0][5]=self.WhiteRook
-       self.Board[0][6]=self.WhiteKing
+       self.Board[0][4]= self.Board[0][7]= chessrules.makesquare_blank()
+       self.Board[0][5]= self.WhiteRook
+       self.Board[0][6]= self.WhiteKing
        
     def handleWhiteQueenSideCastling(self):
-       self.Board[0][4]=self.Board[0][0]=chessrules.makesquare_blank()
-       self.Board[0][3]=self.WhiteRook
-       self.Board[0][2]=self.WhiteKing
+       self.Board[0][4]= self.Board[0][0]= chessrules.makesquare_blank()
+       self.Board[0][3]= self.WhiteRook
+       self.Board[0][2]= self.WhiteKing
        
     def handleBlackKingSideCastling(self):
-       self.Board[7][4]=self.Board[7][7]=chessrules.makesquare_blank()
-       self.Board[7][5]=self.BlackRook
+       self.Board[7][4]= self.Board[7][7]=chessrules.makesquare_blank()
+       self.Board[7][5]=  self.BlackRook
        self.Board[7][6]=self.BlackKing
        
     def handleBlackQueenSideCastling(self):
-       self.Board[7][4]=self.Board[7][0]=chessrules.makesquare_blank()
-       self.Board[7][3]=self.BlackRook
-       self.Board[7][2]=self.BlackKing
+       self.Board[7][4]= self.Board[7][0]=chessrules.makesquare_blank()
+       self.Board[7][3]= self.BlackRook
+       self.Board[7][2]= self.BlackKing
     
     def MovePieceTo(self,move):
         #whats the piece, figure out original position n new position
@@ -211,20 +222,7 @@ class ChessBoard:
             self.handleBlackQueenSideCastling()
         else:
             self.handleMove(move)
-        '''
-                  or ( and ) \
-                  or ( and ) \
-                  or ( and )\
-                             or (self.handleMove(move))
-        makemove = lambda move: (chessrules.iswhite_kingside_castling(move,self.MoveTurn) and self.handleWhiteKingSideCastling()) \
-                  or (chessrules.isblack_kingside_castling(move,self.MoveTurn) and self.handleBlackKingSideCastling()) \
-                  or (chessrules.iswhite_queenside_castling(move,self.MoveTurn) and self.handleWhiteQueenSideCastling()) \
-                  or (chessrules.isblack_queenside_castling(move,self.MoveTurn) and self.handleBlackQueenSideCastling())\
-                             or ()
-        
-        makemove(move)
-           '''         
-        
+       
 
     def handleMove(self,move):
 
@@ -251,7 +249,9 @@ class ChessBoard:
         elif typeofpieceToMove == Pieces.Queen or typeofpieceToMove == Pieces.King:
              self.handleQueenKingMovement(orgSquare)
         elif typeofpieceToMove == Pieces.Rook:
-             self.handleRookMovement(orgSquare,destSquare)
+             self.handleRookMovement(orgSquare,destSquare,move)
+
+        
        
     def get_file_of_newsquare(self,newsquare):
         return newsquare[1]
@@ -355,10 +355,14 @@ class ChessBoard:
         
             else:
                 hasplus = chessnotation.CHECK_ACTION in move
-                if len(move) == 4 and hasplus == False:
+                if len(move) == 4 and hasplus == False and chessnotation.has2Digits(move) == False:
                     self.OriginalFile.append(self.Files.index(move[1]))
                     destFile = self.Files.index(move[2])
                     destRank = int(move[3])-1
+                elif len(move) == 4 and hasplus == False and chessnotation.has2Digits(move) == True:
+                    destFile = self.Files.index(move[2])
+                    destRank = int(move[3])-1
+                    self.originalrank = int(move[1]) - 1
                 else:
                     destFile = self.Files.index(move[1])
                     destRank = int(move[2])-1
