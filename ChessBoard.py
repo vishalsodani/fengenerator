@@ -110,6 +110,8 @@ class ChessBoard:
        
 
     def handlePawnMovement(self,orgSquare):
+        print orgSquare[0]
+        print orgSquare[1]
         self.Board[orgSquare[0]][orgSquare[1]] = chessrules.makesquare_blank()
     def handleKnightMovement(self,orgSquare,destSquare):
 
@@ -272,14 +274,25 @@ class ChessBoard:
         ranks = []
         originalposofPawn = []
         ##for pawn
-        NoOfPawnsInAFile = self.getNoOfPawnsInAFile(fil,ranks)
         
+        NoOfPawnsInAFile = self.getNoOfPawnsInAFile(fil,ranks)
+        #this is for enpassant if the destination square is empty,then take one rank abobe or below n make it empty
+        if self.Board[newsquare[0]][newsquare[1]]== chessrules.makesquare_blank() and self.PawnCaptureByPawn == True:
+            
+            if self.MoveTurn == self.B:
+                
+                self.Board[newsquare[0]+ 1][newsquare[1]]=chessrules.makesquare_blank()
+            elif self.MoveTurn == self.W:
+                self.Board[newsquare[0]- 1][newsquare[1]]=chessrules.makesquare_blank()	     
+
+
         if len(NoOfPawnsInAFile) == 1 and self.PawnCaptureByPawn == False:
           
             originalposofPawn.append(NoOfPawnsInAFile[0])
             originalposofPawn.append(fil)
         elif len(NoOfPawnsInAFile) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == self.B:
-           
+            #if self.Board[newsquare[0]][newsquare[1]]== chessrules.makesquare_blank(): #this is for enpassant if the destination square is empty
+                #self.Board[newsquare[0]+ 1][newsquare[1]]=chessrules.makesquare_blank()
             originalposofPawn.append(newsquare[0] + 1)
             if move[2] > move[0]:
                 originalposofPawn.append(fil - 1)
@@ -288,8 +301,12 @@ class ChessBoard:
                 
             
         elif len(NoOfPawnsInAFile) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == self.W:
+            #if self.Board[newsquare[0]][newsquare[1]]== chessrules.makesquare_blank(): #this is for enpassant if the destination square is empty
+                #self.Board[newsquare[0]- 1][newsquare[1]]=chessrules.makesquare_blank()
+
             originalposofPawn.append(newsquare[0] - 1)
             originalposofPawn.append(self.Files.index(move[0]))
+
         #this handles case when a pawn is captured ona file where there are no pawns of that color    
         elif len(NoOfPawnsInAFile) == 0 and self.PawnCaptureByPawn == True and self.MoveTurn == self.W:
             originalposofPawn.append(newsquare[0] - 1)

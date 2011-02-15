@@ -607,6 +607,38 @@ class TestFENGenerator(unittest.TestCase):
         print FENGen.board.Board
         self.assertEqual('r1br2k1/ppq1ppbp/2n3p1/2p5/2BPP3/2P1B3/P3NPPP/2RQ1RK1',FENGen.fen)
 
+    def test_enpassant_blackpawncaptured(self):
+            
+        FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
+
+        
+        FENGen.fen_after_move('e4')
+        FENGen.fen_after_move('e6')
+        FENGen.fen_after_move('e5')
+       # FENGen.fen_after_move('f6')
+        FENGen.fen_after_move('f5')
+        FENGen.fen_after_move('exf6')
+        
+        print FENGen.board.Board
+        self.assertEqual('rnbqkbnr/pppp2pp/4pP2/8/8/8/PPPP1PPP/RNBQKBNR',FENGen.fen)
+        
+    def test_enpassant_whitepawncaptured(self):
+            
+        FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
+
+        
+        FENGen.fen_after_move('e3')
+        FENGen.fen_after_move('c5')
+        FENGen.fen_after_move('f3')
+       # FENGen.fen_after_move('f6')
+        FENGen.fen_after_move('c4')
+        FENGen.fen_after_move('d4')
+        FENGen.fen_after_move('cxd3')
+        
+        print FENGen.board.Board
+        self.assertEqual('rnbqkbnr/pp1ppppp/8/8/8/3pPP2/PPP3PP/RNBQKBNR',FENGen.fen)
+
+
         
 if __name__ == '__main__':
     unittest.main()
