@@ -110,8 +110,6 @@ class ChessBoard:
        
 
     def handlePawnMovement(self,orgSquare):
-        print orgSquare[0]
-        print orgSquare[1]
         self.Board[orgSquare[0]][orgSquare[1]] = chessrules.makesquare_blank()
     def handleKnightMovement(self,orgSquare,destSquare):
 
