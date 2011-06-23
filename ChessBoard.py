@@ -2,63 +2,45 @@ from Pieces import PieceParser
 from Pieces import Pieces
 from Pieces import PiecePosition
 from FenBuilder import FenBuilder
+from Square import Square
 import chessrules
 import chessnotation
 
-
+''' this class represents information pieces on the cheboard '''
 class ChessBoard:
     W = chessrules.itiswhites_move()
     B = chessrules.itisblacks_move()
-    BlackPawn = 'p'
-    WhitePawn = 'P'
-    WhiteKing = 'K'
-    BlackKing = 'k'
-    WhiteRook = 'R'
-    BlackRook = 'r'
-    WhiteBishop = 'B'
-    BlackBishop = 'b'
-    WhiteQueen ='Q'
-    BlackQueen = 'q'
-    WhiteKnight = 'N'
-    BlackKnight = 'n'
-    
-    
     Files = ['a','b','c','d','e','f','g','h']
 
     def __init__(self):
+
         self.Board = [['' for col in range(8)] for row in range(8)]
-        self.Board[0][0] = self.WhiteRook
-        self.Board[0][1] = self.WhiteKnight
-        self.Board[0][2] = self.WhiteBishop
-        self.Board[0][3] = self.WhiteQueen
-        self.Board[0][4] = self.WhiteKing
-        self.Board[0][5] = self.WhiteBishop
-        self.Board[0][6] = self.WhiteKnight
-        self.Board[0][7] = self.WhiteRook
-        
-        
-        for bfile in range(0,8):
-            self.Board[1][bfile] = self.WhitePawn
-
-
-        self.Board[7][0] = self.BlackRook
-        self.Board[7][1] = self.BlackKnight
-        self.Board[7][2] = self.BlackBishop
-        self.Board[7][3] = self.BlackQueen
-        self.Board[7][4] = self.BlackKing
-        self.Board[7][5] = self.BlackBishop
-        self.Board[7][6] = self.BlackKnight
-        self.Board[7][7] = self.BlackRook
-        
-        for bfile in range(0,8):
-            self.Board[6][bfile] = self.BlackPawn
-
+        self.setup_white_pieces()
+        self.setup_black_pieces()
         self.MoveTurn = self.W
-        self.PawnCaptureByPawn = False
         self.currentfen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
         self.OriginalFile = []
-        self.piecetomove = ''
         self.originalrank = -1 #aaded for rook scenario when 2 rooks on a1 and a5, and move to a3, so this gives which rook moved
+
+    def setup_white_pieces(self):
+        
+        self.Board[0][0] = self.Board[0][7] = Pieces.WhiteRook
+        self.Board[0][1] = self.Board[0][6] = Pieces.WhiteKnight
+        self.Board[0][2] = self.Board[0][5]= Pieces.WhiteBishop
+        self.Board[0][3] = Pieces.WhiteQueen
+        self.Board[0][4] = Pieces.WhiteKing
+        for bfile in range(0,8):
+            self.Board[1][bfile] = Pieces.WhitePawn
+
+    def setup_black_pieces(self):
+        
+        self.Board[7][0] = self.Board[7][7] = Pieces.BlackRook
+        self.Board[7][1] = self.Board[7][6] = Pieces.BlackKnight
+        self.Board[7][2] = self.Board[7][5] = Pieces.BlackBishop
+        self.Board[7][3] = Pieces.BlackQueen
+        self.Board[7][4] = Pieces.BlackKing
+        for bfile in range(0,8):
+            self.Board[6][bfile] = Pieces.BlackPawn
 
     def genFEN(self):
         
@@ -68,28 +50,11 @@ class ChessBoard:
         startingcol = 0
         
         fenbuilder = FenBuilder(self.Board)
-        for rank in [7,6,5,4,3,2,1,0]:
+        for rank in range(7,-1,-1):
             if rank < 7:
                 fenbuilder.fen += '/'
             for afile in range(startingcol,8):
-
-                if self.Board[rank][afile] == EMPTYSQUARE:
-                    fenbuilder.build_fen_whenemptysqure()
-                elif fenbuilder.emptySquaresCount > 0 and self.Board[rank][afile] != EMPTYSQUARE:
-                    fenbuilder.build_fen_when_a_pieceexists_afteremptysquares(rank,afile)
-                else:
-                    fenbuilder.build_fen_when_a_pieceexists(rank,afile)
-                    
-                    
-                #fenbuilder.build_fen_when_a_pieceexists_afteremptysquares(rank,afile) if fenbuilder.emptySquaresCount > 0 and self.Board[rank][afile] != EMPTYSQUARE
-                if fenbuilder.emptySquaresCount == ALLSQUARES_EMPTY_INROW:
-                    fenbuilder.fen += str(fenbuilder.emptySquaresCount)
-                    fenbuilder.emptySquaresCount = 0
-                elif fenbuilder.emptySquaresCount > 0 and afile == 7 and self.Board[rank][afile] == EMPTYSQUARE:
-                    fenbuilder.fen += str(fenbuilder.emptySquaresCount)
-                    fenbuilder.emptySquaresCount = 0
-           
-
+                fenbuilder.build_fen_for_rank_file(rank,afile)  
 
         self.MoveTurn = self.B if self.MoveTurn == self.W else self.W
 
@@ -97,13 +62,14 @@ class ChessBoard:
         return self.currentfen
 
    
-    
+    def is_square_empty(self,rank,afile):
+        return self.Board[rank][afile] == ''
         
     def evaluatePieceToMove(self,pieceToMove):
-        whitepieces = {Pieces.Pawn : self.WhitePawn , Pieces.Knight : self.WhiteKnight, Pieces.Bishop: self.WhiteBishop, Pieces.Queen : self.WhiteQueen,
-                       Pieces.King : self.WhiteKing, Pieces.Rook : self.WhiteRook}
-        blackpieces = {Pieces.Pawn : self.BlackPawn , Pieces.Knight : self.BlackKnight, Pieces.Bishop: self.BlackBishop, Pieces.Queen : self.BlackQueen,
-                       Pieces.King : self.BlackKing, Pieces.Rook : self.BlackRook}
+        whitepieces = {Pieces.Pawn : Pieces.WhitePawn , Pieces.Knight : Pieces.WhiteKnight, Pieces.Bishop: Pieces.WhiteBishop, Pieces.Queen : Pieces.WhiteQueen,
+                       Pieces.King : Pieces.WhiteKing, Pieces.Rook : Pieces.WhiteRook}
+        blackpieces = {Pieces.Pawn : Pieces.BlackPawn , Pieces.Knight : Pieces.BlackKnight, Pieces.Bishop: Pieces.BlackBishop, Pieces.Queen : Pieces.BlackQueen,
+                       Pieces.King : Pieces.BlackKing, Pieces.Rook : Pieces.BlackRook}
 
         
         return whitepieces[pieceToMove] if self.MoveTurn == self.W else blackpieces[pieceToMove]
@@ -111,6 +77,7 @@ class ChessBoard:
 
     def handlePawnMovement(self,orgSquare):
         self.Board[orgSquare[0]][orgSquare[1]] = chessrules.makesquare_blank()
+        
     def handleKnightMovement(self,orgSquare,destSquare):
 
             if len(self.OriginalFile) == 1:
@@ -145,18 +112,16 @@ class ChessBoard:
                         self.Board[pp.rank][pp.filep] = chessrules.makesquare_blank()
                     elif sum % 2 != 0 and evensq == False:
                         self.Board[pp.rank][pp.filep] = chessrules.makesquare_blank()
+                        
     def handleQueenKingMovement(self, orgSquare):
         self.Board[orgSquare[0].rank][orgSquare[0].filep]= ''
 
     def handleRookMovement(self, orgSquare, destSquare,move):
-
         
         if self.originalrank != -1:
                 originalf = self.Files.index(move[2])
                 self.Board[self.originalrank][originalf]=chessrules.makesquare_blank()
                 self.originalrank = -1
-                
-        
         elif len(self.OriginalFile) == 1:
                     for rook in orgSquare:
                         if rook.filep == self.OriginalFile[0]:
@@ -196,23 +161,23 @@ class ChessBoard:
 
     def handleWhiteKingSideCastling(self):
        self.Board[0][4]= self.Board[0][7]= chessrules.makesquare_blank()
-       self.Board[0][5]= self.WhiteRook
-       self.Board[0][6]= self.WhiteKing
+       self.Board[0][5]= Pieces.WhiteRook
+       self.Board[0][6]= Pieces.WhiteKing
        
     def handleWhiteQueenSideCastling(self):
        self.Board[0][4]= self.Board[0][0]= chessrules.makesquare_blank()
-       self.Board[0][3]= self.WhiteRook
-       self.Board[0][2]= self.WhiteKing
+       self.Board[0][3]= Pieces.WhiteRook
+       self.Board[0][2]= Pieces.WhiteKing
        
     def handleBlackKingSideCastling(self):
        self.Board[7][4]= self.Board[7][7]=chessrules.makesquare_blank()
-       self.Board[7][5]=  self.BlackRook
-       self.Board[7][6]=self.BlackKing
+       self.Board[7][5]=  Pieces.BlackRook
+       self.Board[7][6]=Pieces.BlackKing
        
     def handleBlackQueenSideCastling(self):
        self.Board[7][4]= self.Board[7][0]=chessrules.makesquare_blank()
-       self.Board[7][3]= self.BlackRook
-       self.Board[7][2]= self.BlackKing
+       self.Board[7][3]= Pieces.BlackRook
+       self.Board[7][2]= Pieces.BlackKing
     
     def MovePieceTo(self,move):
         #whats the piece, figure out original position n new position
@@ -233,18 +198,15 @@ class ChessBoard:
     def handleMove(self,move):
 
         typeofpieceToMove = PieceParser().getPieceMoved(move)
-            
-        self.piecetomove = self.evaluatePieceToMove(typeofpieceToMove)
-            
+        piecetomove = self.evaluatePieceToMove(typeofpieceToMove)
         destSquare = self.getDestinationSquare(move,typeofpieceToMove)
-     
             
         if typeofpieceToMove == Pieces.Pawn:
-            orgSquare = self.getOriginalPosition(typeofpieceToMove,destSquare,move)
+            orgSquare = self.getOriginalPositionOfPawn(typeofpieceToMove,destSquare,move)
         else:
-            orgSquare = self.getOriginalPositionForKnight(typeofpieceToMove,destSquare)
+            orgSquare = self.getOriginalPositionForPiece(typeofpieceToMove,destSquare,piecetomove)
                 
-        self.Board[destSquare[0]][destSquare[1]] = self.piecetomove
+        self.Board[destSquare[0]][destSquare[1]] = piecetomove
             
         if typeofpieceToMove == Pieces.Pawn:
             self.handlePawnMovement(orgSquare)
@@ -260,35 +222,38 @@ class ChessBoard:
         
        
     def get_file_of_newsquare(self,newsquare):
+        
         return newsquare[1]
+    
+    def is_pawn_captured_by_pawn(self,pieceToMove,move):
 
-    def getOriginalPosition(self,piece,newsquare,move):
+        if pieceToMove != Pieces.Pawn:
+            return False
+        if chessnotation.CAPTURE_ACTION in move:
+            return True
+        return False
+        
+    def getOriginalPositionOfPawn(self,piece,newsquare,move):
         #if its pawn can move one or 2 squares #which file how many pawns on that file
 
-
         fil = self.get_file_of_newsquare(newsquare)
-        
-
         ranks = []
         originalposofPawn = []
         ##for pawn
-        
+        PawnCaptureByPawn = self.is_pawn_captured_by_pawn(piece,move)
         NoOfPawnsInAFile = self.getNoOfPawnsInAFile(fil,ranks)
         #this is for enpassant if the destination square is empty,then take one rank abobe or below n make it empty
-        if self.Board[newsquare[0]][newsquare[1]]== chessrules.makesquare_blank() and self.PawnCaptureByPawn == True:
-            
+        if self.Board[newsquare[0]][newsquare[1]]== chessrules.makesquare_blank() and PawnCaptureByPawn == True:
             if self.MoveTurn == self.B:
-                
                 self.Board[newsquare[0]+ 1][newsquare[1]]=chessrules.makesquare_blank()
             elif self.MoveTurn == self.W:
                 self.Board[newsquare[0]- 1][newsquare[1]]=chessrules.makesquare_blank()	     
 
 
-        if len(NoOfPawnsInAFile) == 1 and self.PawnCaptureByPawn == False:
-          
+        if len(NoOfPawnsInAFile) == 1 and PawnCaptureByPawn == False:
             originalposofPawn.append(NoOfPawnsInAFile[0])
             originalposofPawn.append(fil)
-        elif len(NoOfPawnsInAFile) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == self.B:
+        elif len(NoOfPawnsInAFile) == 1 and PawnCaptureByPawn == True and self.MoveTurn == self.B:
             #if self.Board[newsquare[0]][newsquare[1]]== chessrules.makesquare_blank(): #this is for enpassant if the destination square is empty
                 #self.Board[newsquare[0]+ 1][newsquare[1]]=chessrules.makesquare_blank()
             originalposofPawn.append(newsquare[0] + 1)
@@ -298,7 +263,7 @@ class ChessBoard:
                 originalposofPawn.append(fil + 1)
                 
             
-        elif len(NoOfPawnsInAFile) == 1 and self.PawnCaptureByPawn == True and self.MoveTurn == self.W:
+        elif len(NoOfPawnsInAFile) == 1 and PawnCaptureByPawn == True and self.MoveTurn == self.W:
             #if self.Board[newsquare[0]][newsquare[1]]== chessrules.makesquare_blank(): #this is for enpassant if the destination square is empty
                 #self.Board[newsquare[0]- 1][newsquare[1]]=chessrules.makesquare_blank()
 
@@ -306,10 +271,10 @@ class ChessBoard:
             originalposofPawn.append(self.Files.index(move[0]))
 
         #this handles case when a pawn is captured ona file where there are no pawns of that color    
-        elif len(NoOfPawnsInAFile) == 0 and self.PawnCaptureByPawn == True and self.MoveTurn == self.W:
+        elif len(NoOfPawnsInAFile) == 0 and PawnCaptureByPawn == True and self.MoveTurn == self.W:
             originalposofPawn.append(newsquare[0] - 1)
             originalposofPawn.append(self.Files.index(move[0]))
-        elif len(NoOfPawnsInAFile) == 0 and self.PawnCaptureByPawn == True and self.MoveTurn == self.B:
+        elif len(NoOfPawnsInAFile) == 0 and PawnCaptureByPawn == True and self.MoveTurn == self.B:
             originalposofPawn.append(newsquare[0] + 1)
             originalposofPawn.append(self.Files.index(move[0]))
         elif len(NoOfPawnsInAFile) == 2: 
@@ -321,68 +286,59 @@ class ChessBoard:
        
         return originalposofPawn
 
-    def getOriginalPositionForKnight(self,piece,newsquare):
+    def getOriginalPositionForPiece(self,piece,newsquare,piecetomove):
         fenranks = self.currentfen.split('/')
         fenranks.reverse()
         
         fil = newsquare[1]
         ranks = []
         originalpos = []
-        
-  
-            
-        
 
-        if piece == 'N' or piece == 'B' or piece == 'Q' or piece == 'K' or piece == 'R':
-            
+        if piece != Pieces.Pawn:
             for i in range(0,8):
                    filepos = 0
                    for j in range(0,len(fenranks[i])):
                                   listpieces = fenranks[i]
                                   if listpieces[j].isdigit()== True:
                                      filepos +=  int(listpieces[j]) 
-                                  if listpieces[j] == self.piecetomove:
+                                  if listpieces[j] == piecetomove:
                                       orgpos = PiecePosition(i,filepos)
                                       filepos += 1
                                       originalpos.append(orgpos)
-                                  if listpieces[j].isdigit()== False and listpieces[j] != self.piecetomove:
+                                  if listpieces[j].isdigit()== False and listpieces[j] != piecetomove:
                                       filepos += 1
 
 
 
         return originalpos
                                       
-                                  
+
+    def get_destination_file_rank_oncapture(self,move):
+        return [self.Files.index(move[2]),int(move[3])-1]
+    
+    def get_destination_file_rank(self,move):
+        return [self.Files.index(move[0]),int(move[1])-1]
             
         
     def getDestinationSquare(self,move,pieceToMove):
+        
         destList = []
-        self.PawnCaptureByPawn = False
         self.OriginalFile=[]
         if pieceToMove == Pieces.Pawn:
             if chessnotation.CAPTURE_ACTION in move:
-                destFile = self.Files.index(move[2])
-                destRank = int(move[3])-1
-                self.PawnCaptureByPawn = True
+                destFile , destRank = self.get_destination_file_rank_oncapture(move)
             else:
-                destFile = self.Files.index(move[0])
-                destRank = int(move[1])-1
-       
-            
+                destFile,destRank = self.get_destination_file_rank(move)
         else:
             if chessnotation.CAPTURE_ACTION in move:
-                destFile = self.Files.index(move[2])
-                destRank = int(move[3])-1
-        
+                destFile , destRank = self.get_destination_file_rank_oncapture(move)
             else:
                 hasplus = chessnotation.CHECK_ACTION in move
                 if len(move) == 4 and hasplus == False and chessnotation.has2Digits(move) == False:
                     self.OriginalFile.append(self.Files.index(move[1]))
-                    destFile = self.Files.index(move[2])
-                    destRank = int(move[3])-1
+                    destFile , destRank = self.get_destination_file_rank_oncapture(move)
                 elif len(move) == 4 and hasplus == False and chessnotation.has2Digits(move) == True:
-                    destFile = self.Files.index(move[2])
-                    destRank = int(move[3])-1
+                    destFile , destRank = self.get_destination_file_rank_oncapture(move)
                     self.originalrank = int(move[1]) - 1
                 else:
                     destFile = self.Files.index(move[1])
@@ -392,14 +348,9 @@ class ChessBoard:
         return destList
 
     def getNoOfPawnsInAFile(self,bfile,ranks):
-        if self.MoveTurn == self.W:
-            for i in range(0,8):
-                if self.Board[i][bfile] == self.WhitePawn:
-                    ranks.append(i)
-        if self.MoveTurn == self.B:
-            for i in range(0,8):
-                if self.Board[i][bfile] == self.BlackPawn:
-                    ranks.append(i)
+
+        [ranks.append(i) for i in range(0,8) if self.Board[i][bfile] == Pieces.WhitePawn and self.MoveTurn == self.W]
+        [ranks.append(i) for i in range(0,8) if self.Board[i][bfile] == Pieces.BlackPawn and self.MoveTurn == self.B]
         return ranks
             
 
