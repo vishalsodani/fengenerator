@@ -474,7 +474,7 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('c6')
         self.assertEqual('rnbqkbnr/pp3ppp/2pp4/4P3/4P3/8/PPPP2PP/RNBQKBNR',FENGen.fen)
         FENGen.fen_after_move('e6')
-        print FENGen.board.Board
+
         self.assertEqual('rnbqkbnr/pp3ppp/2ppP3/8/4P3/8/PPPP2PP/RNBQKBNR',FENGen.fen)
         
         FENGen.fen_after_move('Nf6')
@@ -604,7 +604,7 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('Rc1')
         self.assertEqual('r1b2rk1/ppq1ppbp/2n3p1/2p5/2BPP3/2P1B3/P3NPPP/2RQ1RK1',FENGen.fen)
         FENGen.fen_after_move('Rd8')
-        print FENGen.board.Board
+
         self.assertEqual('r1br2k1/ppq1ppbp/2n3p1/2p5/2BPP3/2P1B3/P3NPPP/2RQ1RK1',FENGen.fen)
 
     def test_enpassant_blackpawncaptured(self):
@@ -619,7 +619,7 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('f5')
         FENGen.fen_after_move('exf6')
         
-        print FENGen.board.Board
+
         self.assertEqual('rnbqkbnr/pppp2pp/4pP2/8/8/8/PPPP1PPP/RNBQKBNR',FENGen.fen)
         
     def test_enpassant_whitepawncaptured(self):
@@ -635,7 +635,7 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('d4')
         FENGen.fen_after_move('cxd3')
         
-        print FENGen.board.Board
+
         self.assertEqual('rnbqkbnr/pp1ppppp/8/8/8/3pPP2/PPP3PP/RNBQKBNR',FENGen.fen)
 
 

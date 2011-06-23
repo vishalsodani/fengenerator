@@ -2,7 +2,6 @@ from Pieces import PieceParser
 from Pieces import Pieces
 from Pieces import PiecePosition
 from FenBuilder import FenBuilder
-from Square import Square
 import chessrules
 import chessnotation
 
@@ -14,7 +13,7 @@ class ChessBoard:
 
     def __init__(self):
 
-        self.Board = [['' for col in range(8)] for row in range(8)]
+        self.Board = [["" for col in range(8)] for row in range(8)]
         self.setup_white_pieces()
         self.setup_black_pieces()
         self.MoveTurn = self.W
@@ -22,9 +21,10 @@ class ChessBoard:
         self.OriginalFile = []
         self.originalrank = -1 #aaded for rook scenario when 2 rooks on a1 and a5, and move to a3, so this gives which rook moved
 
+
     def setup_white_pieces(self):
         
-        self.Board[0][0] = self.Board[0][7] = Pieces.WhiteRook
+        self.Board[0][0]= self.Board[0][7] = Pieces.WhiteRook
         self.Board[0][1] = self.Board[0][6] = Pieces.WhiteKnight
         self.Board[0][2] = self.Board[0][5]= Pieces.WhiteBishop
         self.Board[0][3] = Pieces.WhiteQueen
@@ -243,7 +243,7 @@ class ChessBoard:
         PawnCaptureByPawn = self.is_pawn_captured_by_pawn(piece,move)
         NoOfPawnsInAFile = self.getNoOfPawnsInAFile(fil,ranks)
         #this is for enpassant if the destination square is empty,then take one rank abobe or below n make it empty
-        if self.Board[newsquare[0]][newsquare[1]]== chessrules.makesquare_blank() and PawnCaptureByPawn == True:
+        if self.Board[newsquare[0]][newsquare[1]] == chessrules.makesquare_blank() and PawnCaptureByPawn == True:
             if self.MoveTurn == self.B:
                 self.Board[newsquare[0]+ 1][newsquare[1]]=chessrules.makesquare_blank()
             elif self.MoveTurn == self.W:
@@ -277,7 +277,7 @@ class ChessBoard:
         elif len(NoOfPawnsInAFile) == 0 and PawnCaptureByPawn == True and self.MoveTurn == self.B:
             originalposofPawn.append(newsquare[0] + 1)
             originalposofPawn.append(self.Files.index(move[0]))
-        elif len(NoOfPawnsInAFile) == 2: 
+        elif len(NoOfPawnsInAFile) == 2:
             for rnk in ranks:
                 if rnk -  newsquare[0]== 1 and self.MoveTurn == self.B or  rnk -  newsquare[0]== -1 and self.MoveTurn == self.W:
                     originalposofPawn.append(rnk)
