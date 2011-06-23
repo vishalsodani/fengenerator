@@ -11,14 +11,13 @@ class ChessBoard:
     B = chessrules.itisblacks_move()
     Files = ['a','b','c','d','e','f','g','h']
 
-    def __init__(self):
+    def __init__(self,fen):
 
         self.Board = [["" for col in range(8)] for row in range(8)]
         self.setup_white_pieces()
         self.setup_black_pieces()
         self.MoveTurn = self.W
-        self.currentfen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
-        self.OriginalFile = []
+        self.currentfen = fen
         self.originalrank = -1 #aaded for rook scenario when 2 rooks on a1 and a5, and move to a3, so this gives which rook moved
 
 
@@ -78,11 +77,11 @@ class ChessBoard:
     def handlePawnMovement(self,orgSquare):
         self.Board[orgSquare[0]][orgSquare[1]] = chessrules.makesquare_blank()
         
-    def handleKnightMovement(self,orgSquare,destSquare):
+    def handleKnightMovement(self,orgSquare,destSquare,move):
 
-            if len(self.OriginalFile) == 1:
+            if self.is_move_indicates_same2pieces_can_move(move):
                     for pp in orgSquare:
-                        if pp.filep == self.OriginalFile[0]:
+                        if pp.filep == self.Files.index(move[1]):
                             self.Board[pp.rank][pp.filep]= chessrules.makesquare_blank()
                         
             else:
@@ -122,9 +121,9 @@ class ChessBoard:
                 originalf = self.Files.index(move[2])
                 self.Board[self.originalrank][originalf]=chessrules.makesquare_blank()
                 self.originalrank = -1
-        elif len(self.OriginalFile) == 1:
+        elif self.is_move_indicates_same2pieces_can_move(move):
                     for rook in orgSquare:
-                        if rook.filep == self.OriginalFile[0]:
+                        if rook.filep == self.Files.index(move[1]):
                             self.Board[rook.rank][rook.filep]=chessrules.makesquare_blank()
                             break
 
@@ -211,7 +210,7 @@ class ChessBoard:
         if typeofpieceToMove == Pieces.Pawn:
             self.handlePawnMovement(orgSquare)
         elif typeofpieceToMove == Pieces.Knight:
-            self.handleKnightMovement(orgSquare,destSquare)
+            self.handleKnightMovement(orgSquare,destSquare,move)
         elif typeofpieceToMove == Pieces.Bishop:
              self.handleBishopMovement(destSquare,orgSquare)
         elif typeofpieceToMove == Pieces.Queen or typeofpieceToMove == Pieces.King:
@@ -318,12 +317,21 @@ class ChessBoard:
     
     def get_destination_file_rank(self,move):
         return [self.Files.index(move[0]),int(move[1])-1]
-            
+
+    def is_move_indicates_same2pieces_can_move(self,move):
+
+        if chessnotation.CAPTURE_ACTION in move:
+            return False
+        hasplus = chessnotation.CHECK_ACTION in move
+        if len(move) == 4 and hasplus == False and chessnotation.has2Digits(move) == False:
+            return True
+        else:
+            return False
+
         
     def getDestinationSquare(self,move,pieceToMove):
         
         destList = []
-        self.OriginalFile=[]
         if pieceToMove == Pieces.Pawn:
             if chessnotation.CAPTURE_ACTION in move:
                 destFile , destRank = self.get_destination_file_rank_oncapture(move)
@@ -334,8 +342,7 @@ class ChessBoard:
                 destFile , destRank = self.get_destination_file_rank_oncapture(move)
             else:
                 hasplus = chessnotation.CHECK_ACTION in move
-                if len(move) == 4 and hasplus == False and chessnotation.has2Digits(move) == False:
-                    self.OriginalFile.append(self.Files.index(move[1]))
+                if self.is_move_indicates_same2pieces_can_move(move):
                     destFile , destRank = self.get_destination_file_rank_oncapture(move)
                 elif len(move) == 4 and hasplus == False and chessnotation.has2Digits(move) == True:
                     destFile , destRank = self.get_destination_file_rank_oncapture(move)

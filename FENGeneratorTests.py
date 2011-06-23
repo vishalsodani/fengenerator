@@ -9,23 +9,25 @@ class TestFENGenerator(unittest.TestCase):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
         self.assertEqual('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR',FENGen.fen)
+        
     def test_genFEN_AfterInitialPositionNf3(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('Nf3')
         self.assertEqual('rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R',FENGen.fen)
+        
     def test_AfterSecondMove(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
         FENGen.fen_after_move('c5')
         self.assertEqual('rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR',FENGen.fen)
-        #print FENGen.121.board
+        
     def test_AfterThirdMove(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
         FENGen.fen_after_move('c5')
         FENGen.fen_after_move('Nf3')
         self.assertEqual('rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R',FENGen.fen)
-        #print FENGen.board.board
+        
     def test_After4thMove(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -33,6 +35,7 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('Nf3')
         FENGen.fen_after_move('Nc6')
         self.assertEqual('r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R',FENGen.fen)
+        
     def test_After5thMove(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -41,6 +44,7 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('Nc6')
         FENGen.fen_after_move('Bb5')
         self.assertEqual('r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R',FENGen.fen)
+        
     def test_After6thMove(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -49,7 +53,9 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('Nc6')
         FENGen.fen_after_move('Bb5')
         FENGen.fen_after_move('Nf6')
+
         self.assertEqual('r1bqkb1r/pp1ppppp/2n2n2/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R',FENGen.fen)
+        
     def test_After7thMove(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -59,7 +65,9 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('Bb5')
         FENGen.fen_after_move('Nf6')
         FENGen.fen_after_move('Bf1')
+
         self.assertEqual('r1bqkb1r/pp1ppppp/2n2n2/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R',FENGen.fen)
+        
     def test_After8thMove(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -72,6 +80,7 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('Nxe4')
         
         self.assertEqual('r1bqkb1r/pp1ppppp/2n5/2p5/4n3/5N2/PPPP1PPP/RNBQKB1R',FENGen.fen)
+        
     def test_ForWhiteKingSideCastling(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -83,6 +92,7 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('O-O')
       
         self.assertEqual('r1bqkb1r/pp1ppppp/2n2n2/1Bp5/4P3/5N2/PPPP1PPP/RNBQ1RK1',FENGen.fen)
+        
     def test_ForWhiteQueenMove(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -90,6 +100,7 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('Qe2')
       
         self.assertEqual('rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPPQPPP/RNB1KBNR',FENGen.fen)
+        
     def test_ForBlackQueenMove(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -98,6 +109,7 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('Qc7')
       
         self.assertEqual('rnb1kbnr/ppqppppp/8/2p5/4P3/8/PPPPQPPP/RNB1KBNR',FENGen.fen)
+        
     def test_ForWhiteKingMove(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -107,6 +119,7 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('Kd1')
       
         self.assertEqual('rnb1kbnr/ppqppppp/8/2p5/4P3/8/PPPPQPPP/RNBK1BNR',FENGen.fen)
+        
     def test_ForBlackKingMove(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -118,19 +131,16 @@ class TestFENGenerator(unittest.TestCase):
       
         self.assertEqual('rnbk1bnr/ppqppppp/8/2p5/4P3/8/PPPPQPPP/RNBK1BNR',FENGen.fen)
 
-        
-  
-        
+                  
     def test_initalFEN(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         self.assertEqual('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w',FENGen.fen)
         self.assertEqual('White',FENGen.board.MoveTurn)
-    def test_CB(self):
-        CB = ChessBoard.ChessBoard()
-        self.assertEqual('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',CB.genFEN())
+
     def test_shouldGiveEmptyStringForPawnMove_e4(self):
         Par = ChessBoard.PieceParser()
         self.assertEqual('N',Par.getPieceMoved('Ne4'))
+        
     def test_ForCaptureByBlackPawn(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -149,6 +159,7 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('dxe5')
   
         self.assertEqual('rnbqkbnr/ppp2ppp/3p4/4P3/4P3/8/PPP2PPP/RNBQKBNR',FENGen.fen)
+        
     def test_ForRookMoveHorizontally(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -164,6 +175,7 @@ class TestFENGenerator(unittest.TestCase):
 
         
         self.assertEqual('rnbqk1nr/pp2bppp/3pp3/2p5/2B1P3/5N2/PPPP1PPP/RNBQR1K1',FENGen.fen)
+        
     def test_ForRookMoveVertically(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -181,6 +193,7 @@ class TestFENGenerator(unittest.TestCase):
 
         
         self.assertEqual('rnbqk2r/pp2bppp/3ppn2/2p5/2B1P3/4RN2/PPPP1PPP/RNBQ2K1',FENGen.fen)
+        
     def test_ForRookMoveHorizontally_When2RooksCanmove(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')
@@ -188,14 +201,9 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('Nf3')
         FENGen.fen_after_move('d6')
         FENGen.fen_after_move('d4')
-        #self.assertEqual('rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R',FENGen.fen)
         FENGen.fen_after_move('cxd4')
-        #self.assertEqual('rnbqkbnr/pp2pppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R',FENGen.fen)
         FENGen.fen_after_move('Nxd4')
-        #self.assertEqual('rnbqkbnr/pp2pppp/3p4/8/3NP3/8/PPP2PPP/RNBQKB1R',FENGen.fen)
-        #print FENGen.fen
         FENGen.fen_after_move('Nf6')
-        #self.assertEqual('rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R',FENGen.fen)
         FENGen.fen_after_move('Nc3')
         self.assertEqual('rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R',FENGen.fen)
         FENGen.fen_after_move('a6')
@@ -250,14 +258,9 @@ class TestFENGenerator(unittest.TestCase):
         FENGen.fen_after_move('Nf3')
         FENGen.fen_after_move('d6')
         FENGen.fen_after_move('d4')
-        #self.assertEqual('rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R',FENGen.fen)
         FENGen.fen_after_move('cxd4')
-        #self.assertEqual('rnbqkbnr/pp2pppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R',FENGen.fen)
         FENGen.fen_after_move('Nxd4')
-        #self.assertEqual('rnbqkbnr/pp2pppp/3p4/8/3NP3/8/PPP2PPP/RNBQKB1R',FENGen.fen)
-        #print FENGen.fen
         FENGen.fen_after_move('Nf6')
-        #self.assertEqual('rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R',FENGen.fen)
         FENGen.fen_after_move('Nc3')
         self.assertEqual('rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R',FENGen.fen)
         FENGen.fen_after_move('a6')
