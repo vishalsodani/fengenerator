@@ -204,7 +204,7 @@ class ChessBoard:
 
         typeofpieceToMove = PieceParser().getPieceMoved(move)
         piecetomove = self.evaluatePieceToMove(typeofpieceToMove)
-        destSquare = self.getDestinationSquare(move,typeofpieceToMove)
+        destSquare = Move.getDestinationSquare(move,typeofpieceToMove)
             
         if typeofpieceToMove == Pieces.Pawn:
             orgSquare = self.getOriginalPositionOfPawn(typeofpieceToMove,destSquare,move)
@@ -325,30 +325,7 @@ class ChessBoard:
         return [self.Files.index(move[0]),int(move[1])-1]
 
    
-        
-    def getDestinationSquare(self,move,pieceToMove):
-        
-        destList = []
-        if pieceToMove == Pieces.Pawn:
-            if chessnotation.CAPTURE_ACTION in move:
-                destFile , destRank = self.get_destination_file_rank_oncapture(move)
-            else:
-                destFile,destRank = self.get_destination_file_rank(move)
-        else:
-            if chessnotation.CAPTURE_ACTION in move:
-                destFile , destRank = self.get_destination_file_rank_oncapture(move)
-            else:
-                hasplus = chessnotation.CHECK_ACTION in move
-                if Move.is_move_indicates_same2pieces_can_move(move):
-                    destFile , destRank = self.get_destination_file_rank_oncapture(move)
-                elif len(move) == 4 and hasplus == False and chessnotation.has2Digits(move) == True:
-                    destFile , destRank = self.get_destination_file_rank_oncapture(move)
-                else:
-                    destFile = self.Files.index(move[1])
-                    destRank = int(move[2])-1
-        destList.append(destRank)
-        destList.append(destFile)
-        return destList
+
 
     def getNoOfPawnsInAFile(self,bfile,ranks):
 
