@@ -18,9 +18,9 @@ class ChessBoard:
         self.setup_black_pieces()
         self.MoveTurn = self.W
         self.currentfen = fen
-        self.originalrank = -1 #aaded for rook scenario when 2 rooks on a1 and a5, and move to a3, so this gives which rook moved
+       
 
-
+        
     def setup_white_pieces(self):
         
         self.Board[0][0]= self.Board[0][7] = Pieces.WhiteRook
@@ -116,11 +116,16 @@ class ChessBoard:
         self.Board[orgSquare[0].rank][orgSquare[0].filep]= ''
 
     def handleRookMovement(self, orgSquare, destSquare,move):
+
+        originalrank = -1
+        hasplus = chessnotation.CHECK_ACTION in move
+        if len(move) == 4 and hasplus == False and chessnotation.has2Digits(move) == True:
+                    originalrank = int(move[1]) - 1
+
         
-        if self.originalrank != -1:
+        if originalrank != -1:
                 originalf = self.Files.index(move[2])
-                self.Board[self.originalrank][originalf]=chessrules.makesquare_blank()
-                self.originalrank = -1
+                self.Board[originalrank][originalf]=chessrules.makesquare_blank()
         elif self.is_move_indicates_same2pieces_can_move(move):
                     for rook in orgSquare:
                         if rook.filep == self.Files.index(move[1]):
@@ -346,7 +351,6 @@ class ChessBoard:
                     destFile , destRank = self.get_destination_file_rank_oncapture(move)
                 elif len(move) == 4 and hasplus == False and chessnotation.has2Digits(move) == True:
                     destFile , destRank = self.get_destination_file_rank_oncapture(move)
-                    self.originalrank = int(move[1]) - 1
                 else:
                     destFile = self.Files.index(move[1])
                     destRank = int(move[2])-1
