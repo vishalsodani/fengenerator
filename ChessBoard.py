@@ -4,6 +4,7 @@ from Pieces import PiecePosition
 from FenBuilder import FenBuilder
 import chessrules
 import chessnotation
+import Move
 
 ''' this class represents information pieces on the cheboard '''
 class ChessBoard:
@@ -79,7 +80,7 @@ class ChessBoard:
         
     def handleKnightMovement(self,orgSquare,destSquare,move):
 
-            if self.is_move_indicates_same2pieces_can_move(move):
+            if Move.is_move_indicates_same2pieces_can_move(move):
                     for pp in orgSquare:
                         if pp.filep == self.Files.index(move[1]):
                             self.Board[pp.rank][pp.filep]= chessrules.makesquare_blank()
@@ -118,15 +119,15 @@ class ChessBoard:
     def handleRookMovement(self, orgSquare, destSquare,move):
 
         originalrank = -1
-        hasplus = chessnotation.CHECK_ACTION in move
-        if len(move) == 4 and hasplus == False and chessnotation.has2Digits(move) == True:
+
+        if Move.is_move_indicating_movement_of_onepiece_outofpossibility_of_two(move):
                     originalrank = int(move[1]) - 1
 
         
         if originalrank != -1:
                 originalf = self.Files.index(move[2])
                 self.Board[originalrank][originalf]=chessrules.makesquare_blank()
-        elif self.is_move_indicates_same2pieces_can_move(move):
+        elif Move.is_move_indicates_same2pieces_can_move(move):
                     for rook in orgSquare:
                         if rook.filep == self.Files.index(move[1]):
                             self.Board[rook.rank][rook.filep]=chessrules.makesquare_blank()
@@ -323,16 +324,7 @@ class ChessBoard:
     def get_destination_file_rank(self,move):
         return [self.Files.index(move[0]),int(move[1])-1]
 
-    def is_move_indicates_same2pieces_can_move(self,move):
-
-        if chessnotation.CAPTURE_ACTION in move:
-            return False
-        hasplus = chessnotation.CHECK_ACTION in move
-        if len(move) == 4 and hasplus == False and chessnotation.has2Digits(move) == False:
-            return True
-        else:
-            return False
-
+   
         
     def getDestinationSquare(self,move,pieceToMove):
         
@@ -347,7 +339,7 @@ class ChessBoard:
                 destFile , destRank = self.get_destination_file_rank_oncapture(move)
             else:
                 hasplus = chessnotation.CHECK_ACTION in move
-                if self.is_move_indicates_same2pieces_can_move(move):
+                if Move.is_move_indicates_same2pieces_can_move(move):
                     destFile , destRank = self.get_destination_file_rank_oncapture(move)
                 elif len(move) == 4 and hasplus == False and chessnotation.has2Digits(move) == True:
                     destFile , destRank = self.get_destination_file_rank_oncapture(move)
