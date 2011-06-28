@@ -6,7 +6,7 @@ import chessrules
 import chessnotation
 import Move
 
-''' this class represents information pieces on the cheboard '''
+
 class ChessBoard:
     W = chessrules.itiswhites_move()
     B = chessrules.itisblacks_move()
@@ -44,9 +44,7 @@ class ChessBoard:
 
     def genFEN(self):
         
-        EMPTYSQUARE = ''
-        ALLSQUARES_EMPTY_INROW = 8
-        startingrow = 7
+       
         startingcol = 0
         
         fenbuilder = FenBuilder(self.Board)
@@ -75,10 +73,10 @@ class ChessBoard:
         return whitepieces[pieceToMove] if self.MoveTurn == self.W else blackpieces[pieceToMove]
        
 
-    def handlePawnMovement(self,orgSquare):
+    def remove_pawn_from_original_square(self,orgSquare):
         self.Board[orgSquare[0]][orgSquare[1]] = chessrules.makesquare_blank()
         
-    def handleKnightMovement(self,orgSquare,destSquare,move):
+    def remove_knight_from_original_square(self,orgSquare,destSquare,move):
 
             if Move.is_move_indicates_same2pieces_can_move(move):
                     for pp in orgSquare:
@@ -90,16 +88,15 @@ class ChessBoard:
                     for pp in orgSquare:
 
                         if (pp.filep - destSquare[1] == 1 or pp.filep - destSquare[1] == -1) and  abs(pp.rank - destSquare[0]) == 2:
-                           
                             self.Board[pp.rank][pp.filep]=chessrules.makesquare_blank()
-                        if destSquare[0] - pp.rank == 1 and  pp.filep - destSquare[1] == 2:
-                            
-                            self.Board[pp.rank][pp.filep]=chessrules.makesquare_blank()
-                        if abs(destSquare[0] - pp.rank) == 1 and  abs(pp.filep - destSquare[1]) == 2:
 
+                        if destSquare[0] - pp.rank == 1 and  pp.filep - destSquare[1] == 2:
+                            self.Board[pp.rank][pp.filep]=chessrules.makesquare_blank()
+
+                        if abs(destSquare[0] - pp.rank) == 1 and  abs(pp.filep - destSquare[1]) == 2:
                             self.Board[pp.rank][pp.filep]=''
                             
-    def handleBishopMovement(self,destSquare,orgSquare):
+    def remove_bishop_from_original_square(self,destSquare,orgSquare):
 
         # find if original square n destdquare are even or odd
                 evensq = True
@@ -113,10 +110,10 @@ class ChessBoard:
                     elif sum % 2 != 0 and evensq == False:
                         self.Board[pp.rank][pp.filep] = chessrules.makesquare_blank()
                         
-    def handleQueenKingMovement(self, orgSquare):
+    def remove_queen_from_original_square(self, orgSquare):
         self.Board[orgSquare[0].rank][orgSquare[0].filep]= ''
 
-    def handleRookMovement(self, orgSquare, destSquare,move):
+    def remove_rook_from_original_square(self, orgSquare, destSquare,move):
 
         originalrank = -1
 
@@ -214,15 +211,15 @@ class ChessBoard:
         self.Board[destSquare[0]][destSquare[1]] = piecetomove
             
         if typeofpieceToMove == Pieces.Pawn:
-            self.handlePawnMovement(orgSquare)
+            self.remove_pawn_from_original_square(orgSquare)
         elif typeofpieceToMove == Pieces.Knight:
-            self.handleKnightMovement(orgSquare,destSquare,move)
+            self.remove_knight_from_original_square(orgSquare,destSquare,move)
         elif typeofpieceToMove == Pieces.Bishop:
-             self.handleBishopMovement(destSquare,orgSquare)
+             self.remove_bishop_from_original_square(destSquare,orgSquare)
         elif typeofpieceToMove == Pieces.Queen or typeofpieceToMove == Pieces.King:
-             self.handleQueenKingMovement(orgSquare)
+             self.remove_queen_from_original_square(orgSquare)
         elif typeofpieceToMove == Pieces.Rook:
-             self.handleRookMovement(orgSquare,destSquare,move)
+             self.remove_rook_from_original_square(orgSquare,destSquare,move)
 
         
        
