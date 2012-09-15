@@ -3,8 +3,7 @@ import FENGenerator
 import ChessBoard
 
 class TestFENGenerator(unittest.TestCase):
-    def test_justtesting(self):
-        self.assertEqual(1,1)
+
     def test_genFEN_AfterInitialPosition(self):
         FENGen = FENGenerator.FENGenerator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         FENGen.fen_after_move('e4')

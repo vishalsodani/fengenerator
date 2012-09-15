@@ -1,19 +1,19 @@
 import chessnotation
 
-def iswhite_kingside_castling(move,moveturn):
-    return move == chessnotation.CASTLING_ACTION and moveturn == itiswhites_move()
-def isblack_kingside_castling(move,moveturn):
-    return move == chessnotation.CASTLING_ACTION and moveturn == itisblacks_move()
-def itiswhites_move():
+def is_white_kingside_castling(move,moveturn):
+    return move == chessnotation.CASTLING_ACTION and moveturn == is_white_move()
+def is_black_kingside_castling(move,moveturn):
+    return move == chessnotation.CASTLING_ACTION and moveturn == is_black_move()
+def is_white_move():
     return 'White'
-def itisblacks_move():
+def is_black_move():
     return 'Black'
-def makesquare_blank():
+def make_square_blank():
     return ''
-def iswhite_queenside_castling(move,moveturn):
-    return move == chessnotation.QUEEN_CASTLING_ACTION and moveturn == itiswhites_move()
-def isblack_queenside_castling(move,moveturn):
-    return move == chessnotation.QUEEN_CASTLING_ACTION and moveturn == itisblacks_move()
+def is_white_queenside_castling(move,moveturn):
+    return move == chessnotation.QUEEN_CASTLING_ACTION and moveturn == is_white_move()
+def is_black_queenside_castling(move,moveturn):
+    return move == chessnotation.QUEEN_CASTLING_ACTION and moveturn == is_black_move()
 
 
 

@@ -8,8 +8,8 @@ import Move
 
 
 class ChessBoard:
-    W = chessrules.itiswhites_move()
-    B = chessrules.itisblacks_move()
+    W = chessrules.is_white_move()
+    B = chessrules.is_black_move()
     Files = ['a','b','c','d','e','f','g','h']
 
     def __init__(self,fen):
@@ -74,24 +74,24 @@ class ChessBoard:
        
 
     def remove_pawn_from_original_square(self,orgSquare):
-        self.Board[orgSquare[0]][orgSquare[1]] = chessrules.makesquare_blank()
+        self.Board[orgSquare[0]][orgSquare[1]] = chessrules.make_square_blank()
         
     def remove_knight_from_original_square(self,orgSquare,destSquare,move):
 
             if Move.is_move_indicates_same2pieces_can_move(move):
                     for pp in orgSquare:
                         if pp.filep == self.Files.index(move[1]):
-                            self.Board[pp.rank][pp.filep]= chessrules.makesquare_blank()
+                            self.Board[pp.rank][pp.filep]= chessrules.make_square_blank()
                         
             else:
 
                     for pp in orgSquare:
 
                         if (pp.filep - destSquare[1] == 1 or pp.filep - destSquare[1] == -1) and  abs(pp.rank - destSquare[0]) == 2:
-                            self.Board[pp.rank][pp.filep]=chessrules.makesquare_blank()
+                            self.Board[pp.rank][pp.filep]=chessrules.make_square_blank()
 
                         if destSquare[0] - pp.rank == 1 and  pp.filep - destSquare[1] == 2:
-                            self.Board[pp.rank][pp.filep]=chessrules.makesquare_blank()
+                            self.Board[pp.rank][pp.filep]=chessrules.make_square_blank()
 
                         if abs(destSquare[0] - pp.rank) == 1 and  abs(pp.filep - destSquare[1]) == 2:
                             self.Board[pp.rank][pp.filep]=''
@@ -106,9 +106,9 @@ class ChessBoard:
                 for pp in orgSquare:
                     sum = pp.rank + pp.filep + 7
                     if  sum % 2 == 0 and evensq == True:
-                        self.Board[pp.rank][pp.filep] = chessrules.makesquare_blank()
+                        self.Board[pp.rank][pp.filep] = chessrules.make_square_blank()
                     elif sum % 2 != 0 and evensq == False:
-                        self.Board[pp.rank][pp.filep] = chessrules.makesquare_blank()
+                        self.Board[pp.rank][pp.filep] = chessrules.make_square_blank()
                         
     def remove_queen_from_original_square(self, orgSquare):
         self.Board[orgSquare[0].rank][orgSquare[0].filep]= ''
@@ -123,11 +123,11 @@ class ChessBoard:
         
         if originalrank != -1:
                 originalf = self.Files.index(move[2])
-                self.Board[originalrank][originalf]=chessrules.makesquare_blank()
+                self.Board[originalrank][originalf]=chessrules.make_square_blank()
         elif Move.is_move_indicates_same2pieces_can_move(move):
                     for rook in orgSquare:
                         if rook.filep == self.Files.index(move[1]):
-                            self.Board[rook.rank][rook.filep]=chessrules.makesquare_blank()
+                            self.Board[rook.rank][rook.filep]=chessrules.make_square_blank()
                             break
 
         elif len(orgSquare) >= 1:
@@ -137,7 +137,7 @@ class ChessBoard:
                         diffsqrank = abs(rook.rank - destSquare[0])
                         diffsqfile = abs(rook.filep - destSquare[1])
                         if diffsqrank == 0 and diffsqfile == 1:
-                            self.Board[rook.rank][rook.filep]=chessrules.makesquare_blank()
+                            self.Board[rook.rank][rook.filep]=chessrules.make_square_blank()
                             break
                         elif diffsqrank == 0:
                             apieceexists = False
@@ -151,33 +151,33 @@ class ChessBoard:
                                     apieceexists = True
                                     break
                             if apieceexists == False:
-                                    self.Board[rook.rank][rook.filep]=chessrules.makesquare_blank()
+                                    self.Board[rook.rank][rook.filep]=chessrules.make_square_blank()
 
                         #same file movement,vertical rook movement
                         elif diffsqfile == 0:
-                            self.Board[rook.rank][rook.filep]=chessrules.makesquare_blank()
+                            self.Board[rook.rank][rook.filep]=chessrules.make_square_blank()
                             break
                
        
         
 
     def handleWhiteKingSideCastling(self):
-       self.Board[0][4]= self.Board[0][7]= chessrules.makesquare_blank()
+       self.Board[0][4]= self.Board[0][7]= chessrules.make_square_blank()
        self.Board[0][5]= Pieces.WhiteRook
        self.Board[0][6]= Pieces.WhiteKing
        
     def handleWhiteQueenSideCastling(self):
-       self.Board[0][4]= self.Board[0][0]= chessrules.makesquare_blank()
+       self.Board[0][4]= self.Board[0][0]= chessrules.make_square_blank()
        self.Board[0][3]= Pieces.WhiteRook
        self.Board[0][2]= Pieces.WhiteKing
        
     def handleBlackKingSideCastling(self):
-       self.Board[7][4]= self.Board[7][7]=chessrules.makesquare_blank()
+       self.Board[7][4]= self.Board[7][7]=chessrules.make_square_blank()
        self.Board[7][5]=  Pieces.BlackRook
        self.Board[7][6]=Pieces.BlackKing
        
     def handleBlackQueenSideCastling(self):
-       self.Board[7][4]= self.Board[7][0]=chessrules.makesquare_blank()
+       self.Board[7][4]= self.Board[7][0]=chessrules.make_square_blank()
        self.Board[7][3]= Pieces.BlackRook
        self.Board[7][2]= Pieces.BlackKing
     
@@ -185,13 +185,13 @@ class ChessBoard:
         #whats the piece, figure out original position n new position
         #parse first character of string to know the piece
         #whose move
-        if chessrules.iswhite_kingside_castling(move,self.MoveTurn):
+        if chessrules.is_white_kingside_castling(move,self.MoveTurn):
             self.handleWhiteKingSideCastling()
-        elif chessrules.isblack_kingside_castling(move,self.MoveTurn):
+        elif chessrules.is_black_kingside_castling(move,self.MoveTurn):
             self.handleBlackKingSideCastling()
-        elif chessrules.iswhite_queenside_castling(move,self.MoveTurn):
+        elif chessrules.is_white_queenside_castling(move,self.MoveTurn):
             self.handleWhiteQueenSideCastling()
-        elif chessrules.isblack_queenside_castling(move,self.MoveTurn):
+        elif chessrules.is_black_queenside_castling(move,self.MoveTurn):
             self.handleBlackQueenSideCastling()
         else:
             self.handleMove(move)
@@ -245,11 +245,11 @@ class ChessBoard:
         PawnCaptureByPawn = self.is_pawn_captured_by_pawn(piece,move)
         NoOfPawnsInAFile = self.getNoOfPawnsInAFile(fil,ranks)
         #this is for enpassant if the destination square is empty,then take one rank abobe or below n make it empty
-        if self.Board[newsquare[0]][newsquare[1]] == chessrules.makesquare_blank() and PawnCaptureByPawn == True:
+        if self.Board[newsquare[0]][newsquare[1]] == chessrules.make_square_blank() and PawnCaptureByPawn == True:
             if self.MoveTurn == self.B:
-                self.Board[newsquare[0]+ 1][newsquare[1]]=chessrules.makesquare_blank()
+                self.Board[newsquare[0]+ 1][newsquare[1]]=chessrules.make_square_blank()
             elif self.MoveTurn == self.W:
-                self.Board[newsquare[0]- 1][newsquare[1]]=chessrules.makesquare_blank()	     
+                self.Board[newsquare[0]- 1][newsquare[1]]=chessrules.make_square_blank()	     
 
 
         if len(NoOfPawnsInAFile) == 1 and PawnCaptureByPawn == False:
