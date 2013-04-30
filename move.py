@@ -1,6 +1,8 @@
 import chessnotation
-from Pieces import Pieces
+from pieces import Pieces
+
 Files = ['a','b','c','d','e','f','g','h']
+
 def is_it_a_check(move):
     is_check = chessnotation.CHECK_ACTION in move
     return is_check

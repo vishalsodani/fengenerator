@@ -1,10 +1,10 @@
-from Pieces import PieceParser
-from Pieces import Pieces
-from Pieces import PiecePosition
-from FenBuilder import FenBuilder
+from pieces import PieceParser
+from pieces import Pieces
+from pieces import PiecePosition
+from fen_builder import FenBuilder
 import chessrules
 import chessnotation
-import Move
+import move
 
 
 class ChessBoard:
@@ -76,11 +76,11 @@ class ChessBoard:
     def remove_pawn_from_original_square(self,orgSquare):
         self.Board[orgSquare[0]][orgSquare[1]] = chessrules.make_square_blank()
         
-    def remove_knight_from_original_square(self,orgSquare,destSquare,move):
+    def remove_knight_from_original_square(self,orgSquare,destSquare,move_played):
 
-            if Move.is_move_indicates_same2pieces_can_move(move):
+            if move.is_move_indicates_same2pieces_can_move(move_played):
                     for pp in orgSquare:
-                        if pp.filep == self.Files.index(move[1]):
+                        if pp.filep == self.Files.index(move_played[1]):
                             self.Board[pp.rank][pp.filep]= chessrules.make_square_blank()
                         
             else:
@@ -113,20 +113,20 @@ class ChessBoard:
     def remove_queen_from_original_square(self, orgSquare):
         self.Board[orgSquare[0].rank][orgSquare[0].filep]= ''
 
-    def remove_rook_from_original_square(self, orgSquare, destSquare,move):
+    def remove_rook_from_original_square(self, orgSquare, destSquare,move_played):
 
         originalrank = -1
 
-        if Move.is_move_indicating_movement_of_onepiece_outofpossibility_of_two(move):
-                    originalrank = int(move[1]) - 1
+        if move.is_move_indicating_movement_of_onepiece_outofpossibility_of_two(move_played):
+                    originalrank = int(move_played[1]) - 1
 
         
         if originalrank != -1:
-                originalf = self.Files.index(move[2])
+                originalf = self.Files.index(move_played[2])
                 self.Board[originalrank][originalf]=chessrules.make_square_blank()
-        elif Move.is_move_indicates_same2pieces_can_move(move):
+        elif move.is_move_indicates_same2pieces_can_move(move_played):
                     for rook in orgSquare:
-                        if rook.filep == self.Files.index(move[1]):
+                        if rook.filep == self.Files.index(move_played[1]):
                             self.Board[rook.rank][rook.filep]=chessrules.make_square_blank()
                             break
 
@@ -197,14 +197,14 @@ class ChessBoard:
             self.handleMove(move)
        
 
-    def handleMove(self,move):
+    def handleMove(self,move_played):
 
-        typeofpieceToMove = PieceParser().getPieceMoved(move)
+        typeofpieceToMove = PieceParser().getPieceMoved(move_played)
         piecetomove = self.evaluatePieceToMove(typeofpieceToMove)
-        destSquare = Move.getDestinationSquare(move,typeofpieceToMove)
+        destSquare = move.getDestinationSquare(move_played,typeofpieceToMove)
             
         if typeofpieceToMove == Pieces.Pawn:
-            orgSquare = self.getOriginalPositionOfPawn(typeofpieceToMove,destSquare,move)
+            orgSquare = self.getOriginalPositionOfPawn(typeofpieceToMove,destSquare,move_played)
         else:
             orgSquare = self.getOriginalPositionForPiece(typeofpieceToMove,destSquare,piecetomove)
                 
@@ -213,13 +213,13 @@ class ChessBoard:
         if typeofpieceToMove == Pieces.Pawn:
             self.remove_pawn_from_original_square(orgSquare)
         elif typeofpieceToMove == Pieces.Knight:
-            self.remove_knight_from_original_square(orgSquare,destSquare,move)
+            self.remove_knight_from_original_square(orgSquare,destSquare,move_played)
         elif typeofpieceToMove == Pieces.Bishop:
              self.remove_bishop_from_original_square(destSquare,orgSquare)
         elif typeofpieceToMove == Pieces.Queen or typeofpieceToMove == Pieces.King:
              self.remove_queen_from_original_square(orgSquare)
         elif typeofpieceToMove == Pieces.Rook:
-             self.remove_rook_from_original_square(orgSquare,destSquare,move)
+             self.remove_rook_from_original_square(orgSquare,destSquare,move_played)
 
         
        
