@@ -76,7 +76,7 @@ class ChessBoard:
     def remove_pawn_from_original_square(self,original_square):
         self.board[original_square[0]][original_square[1]] = chessrules.make_square_blank()
         
-    def remove_knight_from_original_square(self,original_square,destSquare,move_played):
+    def remove_knight_from_original_square(self,original_square,destination_square,move_played):
 
             if move.is_move_indicates_same2pieces_can_move(move_played):
                     for pp in original_square:
@@ -87,20 +87,20 @@ class ChessBoard:
 
                     for pp in original_square:
 
-                        if (pp.filep - destSquare[1] == 1 or pp.filep - destSquare[1] == -1) and  abs(pp.rank - destSquare[0]) == 2:
+                        if (pp.filep - destination_square[1] == 1 or pp.filep - destination_square[1] == -1) and  abs(pp.rank - destination_square[0]) == 2:
                             self.board[pp.rank][pp.filep]=chessrules.make_square_blank()
 
-                        if destSquare[0] - pp.rank == 1 and  pp.filep - destSquare[1] == 2:
+                        if destination_square[0] - pp.rank == 1 and  pp.filep - destination_square[1] == 2:
                             self.board[pp.rank][pp.filep]=chessrules.make_square_blank()
 
-                        if abs(destSquare[0] - pp.rank) == 1 and  abs(pp.filep - destSquare[1]) == 2:
+                        if abs(destination_square[0] - pp.rank) == 1 and  abs(pp.filep - destination_square[1]) == 2:
                             self.board[pp.rank][pp.filep]=''
                             
-    def remove_bishop_from_original_square(self,destSquare,original_square):
+    def remove_bishop_from_original_square(self,destination_square,original_square):
 
         # find if original square n destdquare are even or odd
                 evensq = True
-                if ((destSquare[0] + destSquare[1] + 7) % 2) != 0:
+                if ((destination_square[0] + destination_square[1] + 7) % 2) != 0:
                     evensq = False
                 
                 for pp in original_square:
@@ -113,7 +113,7 @@ class ChessBoard:
     def remove_queen_from_original_square(self, original_square):
         self.board[original_square[0].rank][original_square[0].filep]= ''
 
-    def remove_rook_from_original_square(self, original_square, destSquare,move_played):
+    def remove_rook_from_original_square(self, original_square, destination_square,move_played):
 
         originalrank = -1
 
@@ -134,19 +134,19 @@ class ChessBoard:
                     
                     #is it horizontal movement, if both rooks are on same rank in original position
                     for rook in original_square:
-                        diffsqrank = abs(rook.rank - destSquare[0])
-                        diffsqfile = abs(rook.filep - destSquare[1])
+                        diffsqrank = abs(rook.rank - destination_square[0])
+                        diffsqfile = abs(rook.filep - destination_square[1])
                         if diffsqrank == 0 and diffsqfile == 1:
                             self.board[rook.rank][rook.filep]=chessrules.make_square_blank()
                             break
                         elif diffsqrank == 0:
                             apieceexists = False
-                            startLoop = rook.filep + 1
-                            endLoop = diffsqfile
-                            if (rook.filep  > destSquare[1]): #oh boy!! just check if rooks file is greater than dest file like Rf8 is greater than d8
-                                startLoop = destSquare[1] + 1
-                                endLoop = startLoop + diffsqfile - 1
-                            for ifile in range(startLoop,endLoop):
+                            start_loop = rook.filep + 1
+                            end_loop = diffsqfile
+                            if (rook.filep  > destination_square[1]): #oh boy!! just check if rooks file is greater than dest file like Rf8 is greater than d8
+                                start_loop = destination_square[1] + 1
+                                end_loop = start_loop + diffsqfile - 1
+                            for ifile in range(start_loop,end_loop):
                                 if self.board[rook.rank][ifile] != "":
                                     apieceexists = True
                                     break
