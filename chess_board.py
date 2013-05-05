@@ -73,19 +73,19 @@ class ChessBoard:
         return whitepieces[pieceToMove] if self.moveturn == self.W else blackpieces[pieceToMove]
        
 
-    def remove_pawn_from_original_square(self,orgSquare):
-        self.board[orgSquare[0]][orgSquare[1]] = chessrules.make_square_blank()
+    def remove_pawn_from_original_square(self,original_square):
+        self.board[original_square[0]][original_square[1]] = chessrules.make_square_blank()
         
-    def remove_knight_from_original_square(self,orgSquare,destSquare,move_played):
+    def remove_knight_from_original_square(self,original_square,destSquare,move_played):
 
             if move.is_move_indicates_same2pieces_can_move(move_played):
-                    for pp in orgSquare:
+                    for pp in original_square:
                         if pp.filep == self.Files.index(move_played[1]):
                             self.board[pp.rank][pp.filep]= chessrules.make_square_blank()
                         
             else:
 
-                    for pp in orgSquare:
+                    for pp in original_square:
 
                         if (pp.filep - destSquare[1] == 1 or pp.filep - destSquare[1] == -1) and  abs(pp.rank - destSquare[0]) == 2:
                             self.board[pp.rank][pp.filep]=chessrules.make_square_blank()
@@ -96,24 +96,24 @@ class ChessBoard:
                         if abs(destSquare[0] - pp.rank) == 1 and  abs(pp.filep - destSquare[1]) == 2:
                             self.board[pp.rank][pp.filep]=''
                             
-    def remove_bishop_from_original_square(self,destSquare,orgSquare):
+    def remove_bishop_from_original_square(self,destSquare,original_square):
 
         # find if original square n destdquare are even or odd
                 evensq = True
                 if ((destSquare[0] + destSquare[1] + 7) % 2) != 0:
                     evensq = False
                 
-                for pp in orgSquare:
+                for pp in original_square:
                     sum = pp.rank + pp.filep + 7
                     if  sum % 2 == 0 and evensq == True:
                         self.board[pp.rank][pp.filep] = chessrules.make_square_blank()
                     elif sum % 2 != 0 and evensq == False:
                         self.board[pp.rank][pp.filep] = chessrules.make_square_blank()
                         
-    def remove_queen_from_original_square(self, orgSquare):
-        self.board[orgSquare[0].rank][orgSquare[0].filep]= ''
+    def remove_queen_from_original_square(self, original_square):
+        self.board[original_square[0].rank][original_square[0].filep]= ''
 
-    def remove_rook_from_original_square(self, orgSquare, destSquare,move_played):
+    def remove_rook_from_original_square(self, original_square, destSquare,move_played):
 
         originalrank = -1
 
@@ -125,15 +125,15 @@ class ChessBoard:
                 originalf = self.Files.index(move_played[2])
                 self.board[originalrank][originalf]=chessrules.make_square_blank()
         elif move.is_move_indicates_same2pieces_can_move(move_played):
-                    for rook in orgSquare:
+                    for rook in original_square:
                         if rook.filep == self.Files.index(move_played[1]):
                             self.board[rook.rank][rook.filep]=chessrules.make_square_blank()
                             break
 
-        elif len(orgSquare) >= 1:
+        elif len(original_square) >= 1:
                     
                     #is it horizontal movement, if both rooks are on same rank in original position
-                    for rook in orgSquare:
+                    for rook in original_square:
                         diffsqrank = abs(rook.rank - destSquare[0])
                         diffsqfile = abs(rook.filep - destSquare[1])
                         if diffsqrank == 0 and diffsqfile == 1:
@@ -161,43 +161,43 @@ class ChessBoard:
        
         
 
-    def handleWhiteKingSideCastling(self):
+    def handle_white_king_side_castling(self):
        self.board[0][4]= self.board[0][7]= chessrules.make_square_blank()
        self.board[0][5]= Pieces.WhiteRook
        self.board[0][6]= Pieces.WhiteKing
        
-    def handleWhiteQueenSideCastling(self):
+    def handle_white_queen_side_castling(self):
        self.board[0][4]= self.board[0][0]= chessrules.make_square_blank()
        self.board[0][3]= Pieces.WhiteRook
        self.board[0][2]= Pieces.WhiteKing
        
-    def handleBlackKingSideCastling(self):
+    def handle_black_king_side_castling(self):
        self.board[7][4]= self.board[7][7]=chessrules.make_square_blank()
        self.board[7][5]=  Pieces.BlackRook
        self.board[7][6]=Pieces.BlackKing
        
-    def handleBlackQueenSideCastling(self):
+    def handle_black_queen_side_castling(self):
        self.board[7][4]= self.board[7][0]=chessrules.make_square_blank()
        self.board[7][3]= Pieces.BlackRook
        self.board[7][2]= Pieces.BlackKing
     
-    def MovePieceTo(self,move):
+    def move_piece_to(self,move):
         #whats the piece, figure out original position n new position
         #parse first character of string to know the piece
         #whose move
         if chessrules.is_white_kingside_castling(move,self.moveturn):
-            self.handleWhiteKingSideCastling()
+            self.handle_white_king_side_castling()
         elif chessrules.is_black_kingside_castling(move,self.moveturn):
-            self.handleBlackKingSideCastling()
+            self.handle_black_king_side_castling()
         elif chessrules.is_white_queenside_castling(move,self.moveturn):
-            self.handleWhiteQueenSideCastling()
+            self.handle_white_queen_side_castling()
         elif chessrules.is_black_queenside_castling(move,self.moveturn):
-            self.handleBlackQueenSideCastling()
+            self.handle_black_queen_side_castling()
         else:
-            self.handleMove(move)
+            self.handle_move(move)
        
 
-    def handleMove(self,move_played):
+    def handle_move(self,move_played):
 
         typeofpieceToMove = PieceParser().getPieceMoved(move_played)
         piecetomove = self.evaluatePieceToMove(typeofpieceToMove)

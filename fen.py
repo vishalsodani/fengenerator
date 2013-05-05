@@ -8,7 +8,7 @@ class FENGenerator:
         
     def fen_after_move(self, move):
         
-        self.board.MovePieceTo(move)
+        self.board.move_piece_to(move)
         self.fen = self.board.generate_fen()
         return self.fen
         
