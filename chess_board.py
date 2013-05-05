@@ -42,7 +42,7 @@ class ChessBoard:
         for bfile in range(0,8):
             self.board[6][bfile] = Pieces.BlackPawn
 
-    def genFEN(self):
+    def generate_fen(self):
         
        
         startingcol = 0

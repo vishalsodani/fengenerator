@@ -165,7 +165,7 @@ class TestFENGenerator(unittest.TestCase):
             'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')
         self.assertEqual(
             'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w', FENGen.fen)
-        self.assertEqual('White', FENGen.board.MoveTurn)
+        self.assertEqual('White', FENGen.board.moveturn)
 
     def test_shouldGiveEmptyStringForPawnMove_e4(self):
 
