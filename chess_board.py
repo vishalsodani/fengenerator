@@ -201,25 +201,25 @@ class ChessBoard:
 
         typeof_piece_to_move = PieceParser().getPieceMoved(move_played)
         piece_to_move = self.evaluatePieceToMove(typeof_piece_to_move)
-        destSquare = move.getDestinationSquare(move_played,typeof_piece_to_move)
+        destination_square = move.getDestinationSquare(move_played,typeof_piece_to_move)
             
         if typeof_piece_to_move == Pieces.Pawn:
-            orgSquare = self.getOriginalPositionOfPawn(typeof_piece_to_move,destSquare,move_played)
+            original_square = self.getOriginalPositionOfPawn(typeof_piece_to_move,destination_square,move_played)
         else:
-            orgSquare = self.getOriginalPositionForPiece(typeof_piece_to_move,destSquare,piece_to_move)
+            original_square = self.getOriginalPositionForPiece(typeof_piece_to_move,destination_square,piece_to_move)
                 
-        self.board[destSquare[0]][destSquare[1]] = piece_to_move
+        self.board[destination_square[0]][destination_square[1]] = piece_to_move
             
         if typeof_piece_to_move == Pieces.Pawn:
-            self.remove_pawn_from_original_square(orgSquare)
+            self.remove_pawn_from_original_square(original_square)
         elif typeof_piece_to_move == Pieces.Knight:
-            self.remove_knight_from_original_square(orgSquare,destSquare,move_played)
+            self.remove_knight_from_original_square(original_square,destination_square,move_played)
         elif typeof_piece_to_move == Pieces.Bishop:
-             self.remove_bishop_from_original_square(destSquare,orgSquare)
+             self.remove_bishop_from_original_square(destination_square,original_square)
         elif typeof_piece_to_move == Pieces.Queen or typeof_piece_to_move == Pieces.King:
-             self.remove_queen_from_original_square(orgSquare)
+             self.remove_queen_from_original_square(original_square)
         elif typeof_piece_to_move == Pieces.Rook:
-             self.remove_rook_from_original_square(orgSquare,destSquare,move_played)
+             self.remove_rook_from_original_square(original_square,destination_square,move_played)
 
         
        
